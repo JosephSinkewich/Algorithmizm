@@ -12,14 +12,115 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f41c1cb711b18f4a99da81dc55516f9, type: 3}
   m_Name: AlgorithmTreeResourcesProvider
   m_EditorClassIdentifier: 
+  serializationData:
+    SerializedFormat: 2
+    SerializedBytes: 
+    ReferencedUnityObjects:
+    - {fileID: 21300000, guid: 4a3324b2c425e92419fac9292f13eaef, type: 3}
+    - {fileID: 21300000, guid: 38a3b514439aae84cb26f343ed3ff0d6, type: 3}
+    - {fileID: 21300000, guid: 61eded0e839638b4793e129752237d0d, type: 3}
+    - {fileID: 21300000, guid: d16fd6c2b7893d2448bdfe54c9100548, type: 3}
+    SerializedBytesString: 
+    Prefab: {fileID: 0}
+    PrefabModificationsReferencedUnityObjects: []
+    PrefabModifications: []
+    SerializationNodes:
+    - Name: _blockTypeSprites
+      Entry: 7
+      Data: 0|System.Collections.Generic.Dictionary`2[[AlgorithmizmModels.Blocks.BlockType,
+        AlgorithmizmModels],[UnityEngine.Sprite, UnityEngine.CoreModule]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 1|System.Collections.Generic.EnumEqualityComparer`1[[AlgorithmizmModels.Blocks.BlockType,
+        AlgorithmizmModels]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 5
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 10
+      Data: 0
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 2
+    - Name: $v
+      Entry: 10
+      Data: 1
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 3
+    - Name: $v
+      Entry: 10
+      Data: 2
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 4
+    - Name: $v
+      Entry: 10
+      Data: 3
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   _algorithmBlockPrefab: {fileID: 2567210833967153141, guid: c28fb9bcdcfe8b840bde5fb19794ec15,
     type: 3}
   _blockDatas:
   - name: BEGIN
     type: 0
-  - name: Move
+  - name: MoveForward
     type: 1
   - name: RotateLeft
+    type: 1
+  - name: RotateRight
     type: 1
   - name: Wait
     type: 1
@@ -35,5 +136,3 @@ MonoBehaviour:
     type: 3
   - name: Set
     type: 4
-  - name: RotateRight
-    type: 1

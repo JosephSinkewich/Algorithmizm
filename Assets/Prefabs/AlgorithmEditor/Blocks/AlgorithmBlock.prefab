@@ -343,3 +343,4 @@ MonoBehaviour:
   _tabulation: {fileID: 5188323238496312656}
   _text: {fileID: 5188323238783842545}
   _image: {fileID: 5188323239915547715}
+  _resourceProvider: {fileID: 11400000, guid: e9e0b486cd3324945957bad783284c5b, type: 2}

@@ -1055,7 +1055,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 55
 --- !u!223 &173561831
 Canvas:
   m_ObjectHideFlags: 0
@@ -5433,7 +5433,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 955757765}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.61328125
+  m_Size: 0.7480469
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6584,7 +6584,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 2063236955}
   m_Direction: 0
   m_Value: 0
-  m_Size: 0.40166667
+  m_Size: 0.31083333
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
