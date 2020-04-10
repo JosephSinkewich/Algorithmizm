@@ -113,6 +113,12 @@ MonoBehaviour:
       Data: 
   _algorithmBlockPrefab: {fileID: 2567210833967153141, guid: c28fb9bcdcfe8b840bde5fb19794ec15,
     type: 3}
+  _activeLabelPrefab: {fileID: 200979371859589216, guid: 5cce735403ee9074196cb3addb4b149d,
+    type: 3}
+  _autosizebleTextPrefab: {fileID: 2291730678053807127, guid: 9437d4c793b227b4789e70a47dbf0db3,
+    type: 3}
+  _valueUiPrefab: {fileID: 4000564014090774829, guid: 490c63c9910bd8a429bbd4c87570c3f9,
+    type: 3}
   _blockDatas:
   - name: BEGIN
     type: 0
@@ -136,3 +142,5 @@ MonoBehaviour:
     type: 3
   - name: Set
     type: 4
+  _activeLabelNormalColor: {r: 1, g: 0.83297265, b: 0, a: 1}
+  _activeLabelErrorColor: {r: 1, g: 0.13192493, b: 0, a: 1}
