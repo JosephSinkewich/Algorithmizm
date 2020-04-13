@@ -24,6 +24,10 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders
         [SerializeField] private Color _activeLabelErrorColor;
 
         public AlgorithmBlockUI AlgorithmBlockPrefab => _algorithmBlockPrefab;
+        public ActiveLabel ActiveLabelPrefab => _activeLabelPrefab;
+        public TextMeshProUGUI AutosizebleTextPrefab => _autosizebleTextPrefab;
+        public ValueUI ValueUiPrefab => _valueUiPrefab;
+
         public List<BlockData> BlockDatas => _blockDatas;
         public Dictionary<BlockType, Sprite> BlockTypeSprites => _blockTypeSprites;
 

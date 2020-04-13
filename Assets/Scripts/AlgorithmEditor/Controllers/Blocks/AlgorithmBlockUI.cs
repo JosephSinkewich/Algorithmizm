@@ -6,6 +6,7 @@ using UnityEngine.EventSystems;
 using Assets.Scripts.AlgorithmEditor.Events;
 using UnityEngine.UI;
 using Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders;
+using Algorithmizm;
 
 namespace Assets.Scripts.AlgorithmEditor.Controllers.Blocks
 {
@@ -17,10 +18,26 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Blocks
 
         [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
 
+        public ValueUI _valueUi;
+
         public IAlgorithmBlock BlockData { get; set; }
 
         public UnityEvent<AlgorithmBlockUI> OnClick { get; set; } =
             new AlgorithmBlockUIEvent();
+
+        public UnityEvent<ValueUI, ActiveLabel> OnLabelClick { get; set; } =
+            new ValueUIEvent();
+
+        private void Start()
+        {
+            _valueUi = GetComponentInChildren<ValueUI>();
+            _valueUi?.OnLabelClick.AddListener(LabelClickHandler);
+        }
+
+        private void OnDestroy()
+        {
+            _valueUi?.OnLabelClick.RemoveListener(LabelClickHandler);
+        }
 
         public void RefreshAnData()
         {
@@ -34,6 +51,11 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Blocks
             {
                 OnClick?.Invoke(this);
             }
+        }
+
+        private void LabelClickHandler(ValueUI valueUi, ActiveLabel label)
+        {
+            OnLabelClick?.Invoke(valueUi, label);
         }
     }
 }

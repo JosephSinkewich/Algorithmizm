@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 using Assets.Scripts.AlgorithmEditor.Events;
+using Algorithmizm;
 
 namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
 {
@@ -24,6 +25,9 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
 
         public UnityEvent<AlgorithmBlockUI> OnBlockClick { get; set; } =
             new AlgorithmBlockUIEvent();
+
+        public UnityEvent<ValueUI, ActiveLabel> OnLabelClick { get; set; } =
+            new ValueUIEvent();
 
         public void AddBlock(AlgorithmBlockUI beforeBlock, IAlgorithmBlock newBlockData)
         {
@@ -52,10 +56,10 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
             foreach (AlgorithmBlockUI itBlock in _blocks)
             {
                 itBlock.OnClick.RemoveListener(BlockClickHandler);
-            }
-            foreach (AlgorithmBlockUI itBlock in _blocks)
-            {
                 itBlock.OnClick.AddListener(BlockClickHandler);
+
+                itBlock.OnLabelClick.RemoveListener(LabelClickHandler);
+                itBlock.OnLabelClick.AddListener(LabelClickHandler);
             }
         }
 
@@ -79,6 +83,11 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
         private void BlockClickHandler(AlgorithmBlockUI block)
         {
             OnBlockClick?.Invoke(block);
+        }
+
+        private void LabelClickHandler(ValueUI valueUi, ActiveLabel label)
+        {
+            OnLabelClick?.Invoke(valueUi, label);
         }
     }
 }

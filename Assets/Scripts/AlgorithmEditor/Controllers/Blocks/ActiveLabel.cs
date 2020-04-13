@@ -3,6 +3,7 @@ using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders;
 using TMPro;
+using AlgorithmizmModels.Math;
 
 namespace Algorithmizm
 {
@@ -32,6 +33,12 @@ namespace Algorithmizm
                 _label.text = value;
             }
         }
+
+        public IValue Value { get; set; }
+        public LogicOperations LogicOperation { get; set; }
+        public Operations Operation { get; set; }
+
+        public ActiveLabelType Type { get; set; }
 
         public UnityEvent<ActiveLabel> OnClick { get; set; } =
             new ActiveLabelEvent();
