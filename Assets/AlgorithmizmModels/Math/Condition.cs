@@ -8,6 +8,8 @@ namespace AlgorithmizmModels.Math
         public INumber Value2 { get; set; }
         public Relations Relation { get; set; }
 
+        public ValueType Type => ValueType.Bool;
+
         public bool IsTrue => CalculateExpression();
 
         private bool CalculateExpression()

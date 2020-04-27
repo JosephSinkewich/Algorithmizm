@@ -13,9 +13,9 @@ namespace Algorithmizm
 
         public IValue Value { get; private set; }
 
-        private List<GameObject> _labels = new List<GameObject>();
+        private List<GameObject> _expressionParts = new List<GameObject>();
 
-        public IReadOnlyCollection<GameObject> Labels => _labels;
+        public IReadOnlyCollection<GameObject> ExpressionParts => _expressionParts;
 
         public UnityEvent<ValueUI, ActiveLabel> OnLabelClick { get; set; } =
             new ValueUIEvent();
@@ -30,9 +30,9 @@ namespace Algorithmizm
 
         private void RefreshTreeBlocksListeners()
         {
-            foreach (GameObject itLabel in _labels)
+            foreach (GameObject itPart in _expressionParts)
             {
-                ActiveLabel itActiveLabel = itLabel.GetComponent<ActiveLabel>();
+                ActiveLabel itActiveLabel = itPart.GetComponent<ActiveLabel>();
                 if (itActiveLabel != null)
                 {
                     itActiveLabel.OnClick.RemoveListener(LabelClickHandler);
@@ -43,36 +43,36 @@ namespace Algorithmizm
 
         private void SetContentSiblings()
         {
-            for (int i = 0; i < _labels.Count; i++)
+            for (int i = 0; i < _expressionParts.Count; i++)
             {
-                _labels[i].transform.SetSiblingIndex(i);
+                _expressionParts[i].transform.SetSiblingIndex(i);
             }
         }
 
-        private void AddLabel(GameObject label)
+        private void AddExpressionPart(GameObject expressionPart)
         {
-            _labels.Add(label);
+            _expressionParts.Add(expressionPart);
             RefreshTreeBlocksListeners();
             SetContentSiblings();
         }
 
-        private void RemoveLabel(GameObject label)
+        private void RemoveExpressionPart(GameObject expressionPart)
         {
-            _labels.Remove(label);
-            ActiveLabel itActiveLabel = label.GetComponent<ActiveLabel>();
+            _expressionParts.Remove(expressionPart);
+            ActiveLabel itActiveLabel = expressionPart.GetComponent<ActiveLabel>();
             if (itActiveLabel != null)
             {
                 itActiveLabel.OnClick.RemoveListener(LabelClickHandler);
             }
 
-            Destroy(label);
+            Destroy(expressionPart);
             SetContentSiblings();
         }
 
         private TextMeshProUGUI CreateTextBlock()
         {
             TextMeshProUGUI result = Instantiate(_resourceProvider.AutosizebleTextPrefab, transform);
-            AddLabel(result.gameObject);
+            AddExpressionPart(result.gameObject);
 
             return result;
         }
@@ -80,7 +80,7 @@ namespace Algorithmizm
         private ActiveLabel CreateActiveLabel()
         {
             ActiveLabel result = Instantiate(_resourceProvider.ActiveLabelPrefab, transform);
-            AddLabel(result.gameObject);
+            AddExpressionPart(result.gameObject);
 
             return result;
         }

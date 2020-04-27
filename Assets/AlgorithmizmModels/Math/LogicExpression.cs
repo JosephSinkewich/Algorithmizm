@@ -8,6 +8,8 @@ namespace AlgorithmizmModels.Math
         public IBoolean Boolean2 { get; set; }
         public LogicOperations Operation { get; set; }
 
+        public ValueType Type => ValueType.Bool;
+
         public bool IsTrue => CalculateExpression();
 
         private bool CalculateExpression()

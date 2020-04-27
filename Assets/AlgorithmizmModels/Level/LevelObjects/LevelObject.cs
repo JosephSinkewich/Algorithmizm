@@ -1,7 +1,7 @@
-﻿using Assets.AlgorithmizmModels.Primitives;
+﻿using AlgorithmizmModels.Primitives;
 using System;
 
-namespace Assets.AlgorithmizmModels.Level.LevelObjects
+namespace AlgorithmizmModels.Level
 {
     [Serializable]
     public class LevelObject

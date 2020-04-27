@@ -2,5 +2,6 @@
 {
     public interface IValue
     {
+        ValueType Type { get; }
     }
 }

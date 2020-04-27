@@ -4,6 +4,8 @@
     {
         public IBoolean Boolean { get; set; }
 
+        public ValueType Type => ValueType.Bool;
+
         public bool IsTrue => !Boolean.IsTrue;
     }
 }

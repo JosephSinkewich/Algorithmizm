@@ -8,6 +8,8 @@ namespace AlgorithmizmModels.Math
         public INumber Value2 { get; set; }
         public Operations Operation { get; set; }
 
+        public ValueType Type => ValueType.Number;
+
         public double Value => CalculateExpression();
 
         private double CalculateExpression()

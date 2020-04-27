@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Assets.AlgorithmizmModels.Primitives
+namespace AlgorithmizmModels.Primitives
 {
     [Serializable]
     public class Int2

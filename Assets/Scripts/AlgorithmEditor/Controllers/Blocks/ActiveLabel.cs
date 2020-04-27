@@ -13,6 +13,7 @@ namespace Algorithmizm
         [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
 
         private TextMeshProUGUI _label;
+        private bool _isInitialized;
         private bool _isSeted;
 
         public bool IsSeted
@@ -51,7 +52,7 @@ namespace Algorithmizm
             }
         }
 
-        private void Start()
+        private void Awake()
         {
             _label = GetComponent<TextMeshProUGUI>();
 
