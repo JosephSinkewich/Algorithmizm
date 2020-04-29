@@ -25,7 +25,7 @@ namespace Algorithmizm
             }
         }
 
-        public ValueType Type { get; set; }
+        public ActiveLabelType Type { get; set; }
         
         public UnityEvent<ActiveLabel> OnClick { get; set; } =
             new ActiveLabelEvent();
