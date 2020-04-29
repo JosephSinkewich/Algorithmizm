@@ -122,25 +122,42 @@ MonoBehaviour:
   _blockDatas:
   - name: BEGIN
     type: 0
+    parameters: []
   - name: MoveForward
     type: 1
+    parameters: []
   - name: RotateLeft
     type: 1
+    parameters: []
   - name: RotateRight
     type: 1
+    parameters: []
   - name: Wait
     type: 1
+    parameters: []
   - name: Get
     type: 1
+    parameters: []
   - name: Drop
     type: 1
+    parameters: []
   - name: Use
     type: 1
+    parameters: []
   - name: If
     type: 2
+    parameters:
+    - name: Condition
+      type: 1
   - name: While
     type: 3
+    parameters:
+    - name: Condition
+      type: 1
   - name: Set
     type: 4
+    parameters:
+    - name: Value
+      type: 0
   _activeLabelNormalColor: {r: 1, g: 0.83297265, b: 0, a: 1}
   _activeLabelErrorColor: {r: 1, g: 0.13192493, b: 0, a: 1}

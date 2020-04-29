@@ -10,6 +10,8 @@ namespace AlgorithmizmModels.Math
 
         public ValueType Type => ValueType.Number;
 
+        public IValue Parent { get; set; }
+
         public double Value => CalculateExpression();
 
         private double CalculateExpression()

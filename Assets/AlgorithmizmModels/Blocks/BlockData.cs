@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace AlgorithmizmModels.Blocks
 {
@@ -7,5 +8,6 @@ namespace AlgorithmizmModels.Blocks
     {
         public string name;
         public BlockType type;
+        public List<ParameterData> parameters;
     }
 }

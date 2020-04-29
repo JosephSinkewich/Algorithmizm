@@ -4,43 +4,29 @@ using UnityEngine.EventSystems;
 using Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders;
 using TMPro;
 using AlgorithmizmModels.Math;
+using AlgorithmizmModels.Variables;
 
 namespace Algorithmizm
 {
-    [RequireComponent(typeof(TextMeshProUGUI))]
     public class ActiveLabel : MonoBehaviour, IPointerClickHandler
     {
+        [SerializeField] private TextMeshProUGUI _label;
         [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
 
-        private TextMeshProUGUI _label;
-        private bool _isInitialized;
-        private bool _isSeted;
+        private IValue _value;
 
-        public bool IsSeted
+        public IValue Value
         {
-            get => _isSeted;
+            get => _value;
             set
             {
-                _isSeted = value;
+                _value = value;
                 RefreshView();
             }
         }
 
-        public string Text
-        {
-            get => _label.text;
-            set
-            {
-                _label.text = value;
-            }
-        }
-
-        public IValue Value { get; set; }
-        public LogicOperations LogicOperation { get; set; }
-        public Operations Operation { get; set; }
-
-        public ActiveLabelType Type { get; set; }
-
+        public ValueType Type { get; set; }
+        
         public UnityEvent<ActiveLabel> OnClick { get; set; } =
             new ActiveLabelEvent();
 
@@ -52,22 +38,75 @@ namespace Algorithmizm
             }
         }
 
-        private void Awake()
+        private void Start()
         {
-            _label = GetComponent<TextMeshProUGUI>();
-
             RefreshView();
         }
 
         private void RefreshView()
         {
-            if (_isSeted)
+            if (_value != null)
             {
                 _label.color = _resourceProvider.ActiveLabelNormalColor;
             }
             else
             {
                 _label.color = _resourceProvider.ActiveLabelErrorColor;
+            }
+
+            if (Value == null)
+            {
+                _label.text = "SetValue";
+            }
+            else if (Value is FloatConstant floatConstant)
+            {
+                _label.text = floatConstant.Value.ToString();
+            }
+            else if (Value is BoolConstant boolConstant)
+            {
+                _label.text = boolConstant.IsTrue.ToString();
+            }
+            else if (Value is IVariable variable)
+            {
+                _label.text = variable.Name;
+            }
+            else if (Value is Expression expression)
+            {
+                _label.text = OperationToString(expression.Operation);
+            }
+            else if (Value is LogicExpression logicExpression)
+            {
+                _label.text = LogicOperationToString(logicExpression.Operation);
+            }
+        }
+
+        private string OperationToString(Operations operation)
+        {
+            switch (operation)
+            {
+                case Operations.Add:
+                    return "+";
+                case Operations.Substract:
+                    return "-";
+                case Operations.Multiple:
+                    return "*";
+                case Operations.Divide:
+                    return "/";
+                default:
+                    return "???";
+            }
+        }
+
+        private string LogicOperationToString(LogicOperations operation)
+        {
+            switch (operation)
+            {
+                case LogicOperations.And:
+                    return "&&";
+                case LogicOperations.Or:
+                    return "||";
+                default:
+                    return "???";
             }
         }
     }

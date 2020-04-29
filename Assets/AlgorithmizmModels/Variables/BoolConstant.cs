@@ -2,12 +2,11 @@
 
 namespace AlgorithmizmModels.Variables
 {
-    public class BoolVariable : IVariable, IBoolean
+    public class BoolConstant : IBoolean
     {
-        public ValueType Type => ValueType.Bool;
-
         public bool IsTrue { get; set; }
-        public string Name { get; set; }
+
+        public ValueType Type => ValueType.Bool;
 
         public IValue Parent { get; set; }
     }

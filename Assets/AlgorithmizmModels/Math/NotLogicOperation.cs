@@ -6,6 +6,8 @@
 
         public ValueType Type => ValueType.Bool;
 
+        public IValue Parent { get; set; }
+
         public bool IsTrue => !Boolean.IsTrue;
     }
 }

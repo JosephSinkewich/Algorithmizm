@@ -2,12 +2,11 @@
 
 namespace AlgorithmizmModels.Variables
 {
-    public class FloatVariable : IVariable, INumber
+    public class FloatConstant : INumber
     {
-        public ValueType Type => ValueType.Number;
-
         public double Value { get; set; }
-        public string Name { get; set; }
+
+        public ValueType Type => ValueType.Number;
 
         public IValue Parent { get; set; }
     }

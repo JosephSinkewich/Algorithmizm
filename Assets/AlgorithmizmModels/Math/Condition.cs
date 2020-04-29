@@ -10,6 +10,8 @@ namespace AlgorithmizmModels.Math
 
         public ValueType Type => ValueType.Bool;
 
+        public IValue Parent { get; set; }
+
         public bool IsTrue => CalculateExpression();
 
         private bool CalculateExpression()
