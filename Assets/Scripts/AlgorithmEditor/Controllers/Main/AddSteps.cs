@@ -3,7 +3,7 @@
     enum AddSteps
     {
         SetTarget,
-        ChiseInsertType,
+        ChoiseInsertType,
         ChoiseBlockType,
         ChoiseBlock,
         SetBlockData

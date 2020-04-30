@@ -1,4 +1,5 @@
-﻿using AlgorithmizmModels.Blocks;
+﻿using Algorithmizm;
+using AlgorithmizmModels.Blocks;
 using Assets.Scripts.AlgorithmEditor.Controllers.Blocks;
 using Assets.Scripts.AlgorithmEditor.Controllers.ContextMenu;
 using Assets.Scripts.AlgorithmEditor.Controllers.Panels;
@@ -25,6 +26,9 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
         private Dictionary<MenuButton, BlockType> _addTypeMenuButtons;
         private Dictionary<MenuButton, IAlgorithmBlock> _addBlockMenuButtons;
         private IAlgorithmBlock _addBlockData;
+
+        private SetLabelSteps _setLabelSteps;
+        private ActiveLabel _setLabelTarget;
 
         private void Start()
         {
@@ -86,6 +90,20 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
             }
         }
 
+        private void LabelClickHandler(ValueUI valueUi, ActiveLabel sender)
+        {
+            if (_editPanel.CurrentTool == EditTools.Cursor)
+            {
+                _addTarget = sender;
+
+                ClearContextMenu();
+                SetAddInsertTypeMenuItems();
+                _contextMenu.gameObject.SetActive(true);
+
+                _addSteps = AddSteps.ChoiseInsertType;
+            }
+        }
+
         private void ContextMenuItemClickHandler(MenuButton sender)
         {
             switch (_editPanel.CurrentTool)
@@ -110,7 +128,7 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                         SetAddInsertTypeMenuItems();
                         _contextMenu.gameObject.SetActive(true);
 
-                        _addSteps = AddSteps.ChiseInsertType;
+                        _addSteps = AddSteps.ChoiseInsertType;
                     }
                     break;
             }
@@ -120,7 +138,7 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
         {
             switch (_addSteps)
             {
-                case AddSteps.ChiseInsertType:
+                case AddSteps.ChoiseInsertType:
                     {
                         if (!_addInsertTypeMenuButtons.ContainsKey(sender))
                         {
@@ -172,6 +190,8 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
 
             }
         }
+
+        private 
 
         private void SetAddInsertTypeMenuItems()
         {
