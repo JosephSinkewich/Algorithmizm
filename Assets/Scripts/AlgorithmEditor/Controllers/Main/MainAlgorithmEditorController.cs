@@ -1,5 +1,7 @@
 ﻿using Algorithmizm;
 using AlgorithmizmModels.Blocks;
+using AlgorithmizmModels.Math;
+using AlgorithmizmModels.Variables;
 using Assets.Scripts.AlgorithmEditor.Controllers.Blocks;
 using Assets.Scripts.AlgorithmEditor.Controllers.ContextMenu;
 using Assets.Scripts.AlgorithmEditor.Controllers.Panels;
@@ -12,6 +14,17 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
 {
     public class MainAlgorithmEditorController : MonoBehaviour
     {
+        //mock
+        private List<IVariable> _vars = new List<IVariable>()
+        {
+            new FloatVariable() { Name = "float1", Value = 7f},
+            new FloatVariable() { Name = "float2", Value = 2f},
+            new FloatVariable() { Name = "float3", Value = 2.3f},
+            new BoolVariable() { Name = "bool1", IsTrue = false},
+            new BoolVariable() { Name = "bool2", IsTrue = true},
+            new BoolVariable() { Name = "bool3", IsTrue = true},
+        };
+
         [SerializeField] private EditPanel _editPanel;
         [SerializeField] private TreePanel _treePanel;
         [SerializeField] private ContextMenuController _contextMenu;
@@ -30,6 +43,10 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
         private SetLabelSteps _setLabelSteps;
         private ActiveLabel _setLabelTarget;
         private ValueUI _setLabelValueUi;
+        private ActiveLabelType _activeLabelType;
+        private Dictionary<MenuButton, ActiveLabelType> _labelTypeMenuButtons;
+        private IVariable _activeLabelVariable;
+        private Dictionary<MenuButton, IVariable> _labelVariableMenuButtons;
 
         private void Start()
         {
@@ -45,6 +62,7 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
         {
             _editPanel.OnToolChanged.AddListener(ToolChangedHandler);
             _treePanel.OnBlockClick.AddListener(BlockClickHandler);
+            _treePanel.OnLabelClick.AddListener(LabelClickHandler);
             _contextMenu.OnButtonClick.AddListener(ContextMenuItemClickHandler);
         }
 
@@ -52,6 +70,7 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
         {
             _editPanel.OnToolChanged.RemoveListener(ToolChangedHandler);
             _treePanel.OnBlockClick.RemoveListener(BlockClickHandler);
+            _treePanel.OnLabelClick.RemoveListener(LabelClickHandler);
             _contextMenu.OnButtonClick.RemoveListener(ContextMenuItemClickHandler);
         }
 
@@ -101,6 +120,11 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                         {
                             _setLabelTarget = sender;
                             _setLabelValueUi = valueUi;
+
+                            _setLabelSteps = SetLabelSteps.ChoiseLabelType;
+                            ClearContextMenu();
+                            SetLabelTypeMenuItems();
+                            _contextMenu.gameObject.SetActive(true);
                         }
                         break;
                 }
@@ -114,6 +138,11 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                 case EditTools.Add:
                     {
                         AddOnContextMenuItem(sender);
+                    }
+                    break;
+                case EditTools.Cursor:
+                    {
+                        CursorOnContextMenuItem(sender);
                     }
                     break;
             }
@@ -194,6 +223,51 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
             }
         }
 
+        private void CursorOnContextMenuItem(MenuButton sender)
+        {
+            switch (_setLabelSteps)
+            {
+                case SetLabelSteps.ChoiseLabelType:
+                    {
+                        _activeLabelType = _labelTypeMenuButtons[sender];
+                        _setLabelSteps = SetLabelSteps.SetValue;
+
+                        ClearContextMenu();
+                        if (_activeLabelType == ActiveLabelType.Variable)
+                        {
+                            SetLabelVariableMenuItems();
+                        }
+                        else if (_activeLabelType == ActiveLabelType.Expression)
+                        {
+                            if (_setLabelTarget.ValueType == ValueType.Bool)
+                            {
+                                _setLabelTarget.Value = new LogicExpression();
+                            }
+                            else
+                            {
+                                _setLabelTarget.Value = new Expression();
+                            }
+                            _setLabelValueUi.RebuildAnValue();
+
+                            _setLabelSteps = SetLabelSteps.SetTarget;
+                        }
+
+                    }
+                    break;
+
+                case SetLabelSteps.SetValue:
+                    {
+                        _setLabelTarget.Value = _labelVariableMenuButtons[sender];
+                        _contextMenu.gameObject.SetActive(false);
+
+                        _setLabelValueUi.RebuildAnValue();
+
+                        _setLabelSteps = SetLabelSteps.SetTarget;
+                    }
+                    break;
+            }
+        }
+
         private void SetAddInsertTypeMenuItems()
         {
             _addInsertTypeMenuButtons = new Dictionary<MenuButton, bool>();
@@ -240,7 +314,36 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                 MenuButton button = _contextMenu.AddButton(itData.name);
                 _addBlockMenuButtons.Add(button, blockData);
             }
+        }
 
+        private void SetLabelTypeMenuItems()
+        {
+            _labelTypeMenuButtons = new Dictionary<MenuButton, ActiveLabelType>();
+            MenuButton button;
+
+            button = _contextMenu.AddButton("Constant");
+            _labelTypeMenuButtons.Add(button, ActiveLabelType.Constant);
+
+            button = _contextMenu.AddButton("Variable");
+            _labelTypeMenuButtons.Add(button, ActiveLabelType.Variable);
+
+            button = _contextMenu.AddButton("Expression");
+            _labelTypeMenuButtons.Add(button, ActiveLabelType.Expression);
+        }
+
+        private void SetLabelVariableMenuItems()
+        {
+            _labelVariableMenuButtons = new Dictionary<MenuButton, IVariable>();
+            MenuButton button;
+
+            foreach (IVariable itVar in _vars)
+            {
+                if (itVar.Type == _setLabelTarget.ValueType)
+                {
+                    button = _contextMenu.AddButton(itVar.Name);
+                    _labelVariableMenuButtons.Add(button, itVar);
+                }
+            }
         }
 
         private IAlgorithmBlock CreateBlockData(BlockData data)

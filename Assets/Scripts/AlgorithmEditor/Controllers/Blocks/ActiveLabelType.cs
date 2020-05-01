@@ -2,9 +2,8 @@
 {
     public enum ActiveLabelType
     {
-        Bool,
-        Float,
-        LogicOperation,
-        Operation
+        Variable,
+        Constant,
+        Expression
     }
 }

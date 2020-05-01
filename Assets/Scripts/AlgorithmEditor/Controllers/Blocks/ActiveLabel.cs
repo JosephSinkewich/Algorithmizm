@@ -21,11 +21,13 @@ namespace Algorithmizm
             set
             {
                 _value = value;
+                ValueType = _value.Type;
                 RefreshView();
             }
         }
 
-        public ActiveLabelType Type { get; set; }
+        public ValueType ValueType { get; set; }
+        public ActiveLabelType LabelType { get; set; }
         
         public UnityEvent<ActiveLabel> OnClick { get; set; } =
             new ActiveLabelEvent();

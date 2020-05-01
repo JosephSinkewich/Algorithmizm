@@ -13,7 +13,7 @@ namespace Algorithmizm
         [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
 
         public IValue Value { get; set; }
-        public ActiveLabelType Type { get; set; }
+        public ValueType Type { get; set; }
 
         private List<GameObject> _expressionParts = new List<GameObject>();
 
@@ -42,16 +42,16 @@ namespace Algorithmizm
             if (value == null)
             {
                 ActiveLabel variableLabel = CreateActiveLabel();
-                variableLabel.Type = Type;
+                variableLabel.ValueType = Type;
 
                 switch (Type)
                 {
-                    case ActiveLabelType.Bool:
+                    case ValueType.Bool:
                         {
                             value = new BoolConstant();
                         }
                         break;
-                    case ActiveLabelType.Float:
+                    case ValueType.Number:
                         {
                             value = new FloatConstant();
                         }
@@ -78,7 +78,7 @@ namespace Algorithmizm
                     expression.Value1 = (INumber)value1;
 
                     operation = CreateActiveLabel();
-                    operation.Type = ActiveLabelType.Operation;
+                    operation.LabelType = ActiveLabelType.Expression;
                     operation.Value = expression;
 
                     IValue value2 = expression.Value2;
@@ -92,7 +92,7 @@ namespace Algorithmizm
                     logicExpression.Boolean1 = (IBoolean)bool1;
 
                     operation = CreateActiveLabel();
-                    operation.Type = ActiveLabelType.LogicOperation;
+                    operation.LabelType = ActiveLabelType.Expression;
                     operation.Value = logicExpression;
 
                     IValue bool2 = logicExpression.Boolean2;
@@ -114,23 +114,21 @@ namespace Algorithmizm
             else if (value is IVariable variable)
             {
                 ActiveLabel variableLabel = CreateActiveLabel();
-                variableLabel.Type = variable.Type == ValueType.Bool
-                    ? ActiveLabelType.Bool
-                    : ActiveLabelType.Float;
+                variableLabel.LabelType = ActiveLabelType.Variable;
                 variableLabel.Value = variable;
                 result.Add(variableLabel.gameObject);
             }
             else if (value is FloatConstant floatConstant)
             {
                 ActiveLabel variableLabel = CreateActiveLabel();
-                variableLabel.Type = ActiveLabelType.Float;
+                variableLabel.LabelType = ActiveLabelType.Constant;
                 variableLabel.Value = floatConstant;
                 result.Add(variableLabel.gameObject);
             }
             else if (value is BoolConstant boolConstant)
             {
                 ActiveLabel variableLabel = CreateActiveLabel();
-                variableLabel.Type = ActiveLabelType.Bool;
+                variableLabel.LabelType = ActiveLabelType.Constant;
                 variableLabel.Value = boolConstant;
                 result.Add(variableLabel.gameObject);
             }
