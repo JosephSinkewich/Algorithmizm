@@ -29,6 +29,7 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
 
         private SetLabelSteps _setLabelSteps;
         private ActiveLabel _setLabelTarget;
+        private ValueUI _setLabelValueUi;
 
         private void Start()
         {
@@ -94,13 +95,15 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
         {
             if (_editPanel.CurrentTool == EditTools.Cursor)
             {
-                _addTarget = sender;
-
-                ClearContextMenu();
-                SetAddInsertTypeMenuItems();
-                _contextMenu.gameObject.SetActive(true);
-
-                _addSteps = AddSteps.ChoiseInsertType;
+                switch (_setLabelSteps)
+                {
+                    case SetLabelSteps.SetTarget:
+                        {
+                            _setLabelTarget = sender;
+                            _setLabelValueUi = valueUi;
+                        }
+                        break;
+                }
             }
         }
 
@@ -190,8 +193,6 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
 
             }
         }
-
-        private 
 
         private void SetAddInsertTypeMenuItems()
         {
