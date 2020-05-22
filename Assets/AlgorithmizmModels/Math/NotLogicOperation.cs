@@ -7,7 +7,14 @@
         public ValueType Type => ValueType.Bool;
 
         public IValue Parent { get; set; }
-
-        public bool IsTrue => !Boolean.IsTrue;
+        
+        public bool IsTrue
+        {
+            get
+            {
+                return !Boolean.IsTrue;
+            }
+            set { }
+        }
     }
 }

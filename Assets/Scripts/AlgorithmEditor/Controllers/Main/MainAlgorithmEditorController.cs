@@ -17,13 +17,15 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
         //mock
         private List<IVariable> _vars = new List<IVariable>()
         {
-            new FloatVariable() { Name = "float1", Value = 7f},
-            new FloatVariable() { Name = "float2", Value = 2f},
-            new FloatVariable() { Name = "float3", Value = 2.3f},
-            new BoolVariable() { Name = "bool1", IsTrue = false},
-            new BoolVariable() { Name = "bool2", IsTrue = true},
-            new BoolVariable() { Name = "bool3", IsTrue = true},
+            new FloatVariable() { Name = "float1", Value = 7f },
+            new FloatVariable() { Name = "float2", Value = 2f },
+            new FloatVariable() { Name = "float3", Value = 2.3f },
+            new BoolVariable() { Name = "bool1", IsTrue = false },
+            new BoolVariable() { Name = "bool2", IsTrue = true },
+            new BoolVariable() { Name = "bool3", IsTrue = true },
         };
+
+        [SerializeField] private Transform _canvasTransform;
 
         [SerializeField] private EditPanel _editPanel;
         [SerializeField] private TreePanel _treePanel;
@@ -219,7 +221,6 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                         _addSteps = AddSteps.SetBlockData;
                     }
                     break;
-
             }
         }
 
@@ -247,11 +248,21 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                             {
                                 _setLabelTarget.Value = new Expression();
                             }
+
+                            if (_setLabelTarget.Value.Parent == null)
+                            {
+                                _setLabelValueUi.Value = _setLabelTarget.Value;
+                            }
                             _setLabelValueUi.RebuildAnValue();
 
                             _setLabelSteps = SetLabelSteps.SetTarget;
                         }
+                        else if (_activeLabelType == ActiveLabelType.Constant)
+                        {
+                            SetValueFromDialog(_setLabelValueUi, _setLabelTarget.Value);
 
+                            _setLabelSteps = SetLabelSteps.SetTarget;
+                        }
                     }
                     break;
 
@@ -260,12 +271,59 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                         _setLabelTarget.Value = _labelVariableMenuButtons[sender];
                         _contextMenu.gameObject.SetActive(false);
 
+                        if (_setLabelTarget.Value.Parent == null)
+                        {
+                            _setLabelValueUi.Value = _setLabelTarget.Value;
+                        }
                         _setLabelValueUi.RebuildAnValue();
 
                         _setLabelSteps = SetLabelSteps.SetTarget;
                     }
                     break;
             }
+        }
+
+        private void SetValueFromDialog(ValueUI valueUI, IValue value)
+        {
+            SetValueDialog setDialog = Instantiate(_resourceProvider.SetValueDialog, _canvasTransform);
+
+            string inputValue = "0";
+
+            bool isNumber = true;
+            INumber number = value as INumber;
+            if (number != null)
+            {
+                inputValue = number.Value.ToString();
+            }
+            IBoolean boolean = value as IBoolean;
+            if (boolean != null)
+            {
+                inputValue = boolean.IsTrue ? "1" : "0";
+                isNumber = false;
+            }
+
+            setDialog.Init("Set Constant", inputValue);
+
+            setDialog.OnOk.AddListener(
+                (valueString) =>
+                {
+                    if (isNumber)
+                    {
+                        if (float.TryParse(valueString, out float floatValue))
+                        {
+                            number.Value = floatValue;
+                        }
+                    }
+                    else
+                    {
+                        if (float.TryParse(valueString, out float floatValue))
+                        {
+                            boolean.IsTrue = floatValue != 0;
+                        }
+                    }
+
+                    valueUI.RebuildAnValue();
+                });
         }
 
         private void SetAddInsertTypeMenuItems()

@@ -119,6 +119,10 @@ MonoBehaviour:
     type: 3}
   _valueUiPrefab: {fileID: 4000564014090774829, guid: 490c63c9910bd8a429bbd4c87570c3f9,
     type: 3}
+  _messageDialog: {fileID: 1093427136964555846, guid: 70ddbe308ad8ea741af107e3bde8c6e5,
+    type: 3}
+  _setValueDialog: {fileID: 1690655713911272662, guid: 086a12f51a9a6c94e8e6c8cf32c22516,
+    type: 3}
   _blockDatas:
   - name: BEGIN
     type: 0

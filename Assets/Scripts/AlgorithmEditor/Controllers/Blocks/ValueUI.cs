@@ -32,6 +32,7 @@ namespace Algorithmizm
         {
             IValue value = Value;
             _expressionParts = CreateExpression(ref value);
+            SetContentSiblings();
             Value = value;
         }
 
@@ -103,7 +104,7 @@ namespace Algorithmizm
                 TextMeshProUGUI leftParanthesis = CreateTextBlock();
                 leftParanthesis.text = "(";
                 TextMeshProUGUI rightParanthesis = CreateTextBlock();
-                leftParanthesis.text = ")";
+                rightParanthesis.text = ")";
 
                 result.Add(leftParanthesis.gameObject);
                 result.AddRange(leftValue);

@@ -17,6 +17,9 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders
         [SerializeField] private TextMeshProUGUI _autosizebleTextPrefab;
         [SerializeField] private ValueUI _valueUiPrefab;
 
+        [SerializeField] private MessageDialog _messageDialog;
+        [SerializeField] private SetValueDialog _setValueDialog;
+
         [SerializeField] private List<BlockData> _blockDatas;
         [OdinSerialize] private Dictionary<BlockType, Sprite> _blockTypeSprites;
 
@@ -27,6 +30,9 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders
         public ActiveLabel ActiveLabelPrefab => _activeLabelPrefab;
         public TextMeshProUGUI AutosizebleTextPrefab => _autosizebleTextPrefab;
         public ValueUI ValueUiPrefab => _valueUiPrefab;
+
+        public MessageDialog MessageDialog => _messageDialog;
+        public SetValueDialog SetValueDialog => _setValueDialog;
 
         public List<BlockData> BlockDatas => _blockDatas;
         public Dictionary<BlockType, Sprite> BlockTypeSprites => _blockTypeSprites;

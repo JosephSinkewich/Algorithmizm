@@ -20,7 +20,44 @@ namespace Algorithmizm
             get => _value;
             set
             {
-                _value = value;
+                if (_value != null && _value.Parent != null)
+                {
+
+                    Expression expression = _value.Parent as Expression;
+                    LogicExpression logicExpression = _value.Parent as LogicExpression;
+                    if (expression != null)
+                    {
+                        if (expression.Value1 == _value)
+                        {
+                            _value = value;
+                            expression.Value1 = (INumber)_value;
+                        }
+                        else
+                        {
+                            _value = value;
+                            expression.Value2 = (INumber)_value;
+                        }
+                    }
+
+                    if (logicExpression != null)
+                    {
+                        if (logicExpression.Boolean1 == _value)
+                        {
+                            _value = value;
+                            logicExpression.Boolean1 = (IBoolean)_value;
+                        }
+                        else
+                        {
+                            _value = value;
+                            logicExpression.Boolean2 = (IBoolean)_value;
+                        }
+                    }
+                }
+                else
+                {
+                    _value = value;
+                }
+
                 ValueType = _value.Type;
                 RefreshView();
             }

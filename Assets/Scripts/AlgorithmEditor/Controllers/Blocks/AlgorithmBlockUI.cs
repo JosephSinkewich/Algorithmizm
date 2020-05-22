@@ -8,6 +8,7 @@ using UnityEngine.UI;
 using Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders;
 using Algorithmizm;
 using System.Collections.Generic;
+using AlgorithmizmModels.Math;
 
 namespace Assets.Scripts.AlgorithmEditor.Controllers.Blocks
 {
@@ -50,7 +51,7 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Blocks
 
         private void InitParameter(ParameterData parameter)
         {
-            ValueUI valueUi = CreateValueUI();
+            ValueUI valueUi = CreateValueUI(parameter.type);
             valueUi?.OnLabelClick.AddListener(LabelClickHandler);
         }
 
@@ -62,9 +63,10 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Blocks
             }
         }
 
-        private ValueUI CreateValueUI()
+        private ValueUI CreateValueUI(ValueType type)
         {
             ValueUI result = Instantiate(_resourceProvider.ValueUiPrefab, transform);
+            result.Type = type;
             result.RebuildAnValue();
             _valueUis.Add(result);
 

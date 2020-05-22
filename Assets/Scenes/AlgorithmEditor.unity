@@ -5581,7 +5581,7 @@ MonoBehaviour:
   m_HandleRect: {fileID: 955757765}
   m_Direction: 2
   m_Value: 1
-  m_Size: 0.49414062
+  m_Size: 0.50390625
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -6859,6 +6859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d6209e7689bb8041a9ea9f598cca973, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _canvasTransform: {fileID: 173561832}
   _editPanel: {fileID: 1159240174}
   _treePanel: {fileID: 92202285}
   _contextMenu: {fileID: 1550921214}
@@ -8973,7 +8974,7 @@ PrefabInstance:
     - target: {fileID: 5188323239956437039, guid: c28fb9bcdcfe8b840bde5fb19794ec15,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -16
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5188323239956437039, guid: c28fb9bcdcfe8b840bde5fb19794ec15,
         type: 3}
@@ -8983,7 +8984,7 @@ PrefabInstance:
     - target: {fileID: 5188323239956437039, guid: c28fb9bcdcfe8b840bde5fb19794ec15,
         type: 3}
       propertyPath: m_AnchorMin.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5188323239956437039, guid: c28fb9bcdcfe8b840bde5fb19794ec15,
         type: 3}
@@ -8993,7 +8994,7 @@ PrefabInstance:
     - target: {fileID: 5188323239956437039, guid: c28fb9bcdcfe8b840bde5fb19794ec15,
         type: 3}
       propertyPath: m_AnchorMax.y
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5188323239956437039, guid: c28fb9bcdcfe8b840bde5fb19794ec15,
         type: 3}

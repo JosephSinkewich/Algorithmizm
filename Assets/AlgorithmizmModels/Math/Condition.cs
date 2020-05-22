@@ -12,7 +12,14 @@ namespace AlgorithmizmModels.Math
 
         public IValue Parent { get; set; }
 
-        public bool IsTrue => CalculateExpression();
+        public bool IsTrue
+        {
+            get
+            {
+                return CalculateExpression();
+            }
+            set { }
+        }
 
         private bool CalculateExpression()
         {
