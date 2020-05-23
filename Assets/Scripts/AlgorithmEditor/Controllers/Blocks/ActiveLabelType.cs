@@ -4,6 +4,7 @@
     {
         Variable,
         Constant,
-        Expression
+        Expression,
+        Operation
     }
 }

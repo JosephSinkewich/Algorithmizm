@@ -49,6 +49,10 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
         private Dictionary<MenuButton, ActiveLabelType> _labelTypeMenuButtons;
         private IVariable _activeLabelVariable;
         private Dictionary<MenuButton, IVariable> _labelVariableMenuButtons;
+        private Operations _numberOperation;
+        private Dictionary<MenuButton, Operations> _numberOperationMenuButtons;
+        private LogicOperations _logicOperation;
+        private Dictionary<MenuButton, LogicOperations> _logicOperationMenuButtons;
 
         private void Start()
         {
@@ -254,29 +258,62 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                                 _setLabelValueUi.Value = _setLabelTarget.Value;
                             }
                             _setLabelValueUi.RebuildAnValue();
-
+                            
+                            _contextMenu.gameObject.SetActive(false);
                             _setLabelSteps = SetLabelSteps.SetTarget;
                         }
                         else if (_activeLabelType == ActiveLabelType.Constant)
                         {
                             SetValueFromDialog(_setLabelValueUi, _setLabelTarget.Value);
 
+                            _contextMenu.gameObject.SetActive(false);
                             _setLabelSteps = SetLabelSteps.SetTarget;
+                        }
+                        else if (_activeLabelType == ActiveLabelType.Operation)
+                        {
+                            if (_setLabelTarget.ValueType == ValueType.Bool)
+                            {
+                                SetLogicOperationMenuItems();
+                            }
+                            else
+                            {
+                                SetNumberOperationMenuItems();
+                            }
+
+                            _setLabelSteps = SetLabelSteps.SetValue;
                         }
                     }
                     break;
 
                 case SetLabelSteps.SetValue:
                     {
-                        _setLabelTarget.Value = _labelVariableMenuButtons[sender];
-                        _contextMenu.gameObject.SetActive(false);
-
-                        if (_setLabelTarget.Value.Parent == null)
+                        if (_activeLabelType == ActiveLabelType.Operation)
                         {
-                            _setLabelValueUi.Value = _setLabelTarget.Value;
-                        }
-                        _setLabelValueUi.RebuildAnValue();
+                            if (_setLabelTarget.ValueType == ValueType.Bool)
+                            {
+                                LogicExpression logicExpression = _setLabelTarget.Value as LogicExpression;
+                                logicExpression .Operation = _logicOperationMenuButtons[sender];
+                            }
+                            else
+                            {
+                                Expression numberExpression = _setLabelTarget.Value as Expression;
+                                numberExpression.Operation = _numberOperationMenuButtons[sender];
+                            }
 
+                            _setLabelValueUi.RebuildAnValue();
+                        }
+                        else if (_activeLabelType == ActiveLabelType.Variable)
+                        {
+                            _setLabelTarget.Value = _labelVariableMenuButtons[sender];
+
+                            if (_setLabelTarget.Value.Parent == null)
+                            {
+                                _setLabelValueUi.Value = _setLabelTarget.Value;
+                            }
+                            _setLabelValueUi.RebuildAnValue();
+                        }
+
+                        _contextMenu.gameObject.SetActive(false);
                         _setLabelSteps = SetLabelSteps.SetTarget;
                     }
                     break;
@@ -311,14 +348,46 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                     {
                         if (float.TryParse(valueString, out float floatValue))
                         {
-                            number.Value = floatValue;
+                            FloatConstant constant = number as FloatConstant;
+
+                            if (constant != null)
+                            {
+                                number.Value = floatValue;
+                            }
+                            else
+                            {
+                                constant = new FloatConstant();
+                                constant.Value = floatValue;
+                                _setLabelTarget.Value = constant;
+
+                                if (_setLabelTarget.Value.Parent == null)
+                                {
+                                    _setLabelValueUi.Value = _setLabelTarget.Value;
+                                }
+                            }
                         }
                     }
                     else
                     {
                         if (float.TryParse(valueString, out float floatValue))
                         {
-                            boolean.IsTrue = floatValue != 0;
+                            BoolConstant constant = boolean as BoolConstant;
+
+                            if (constant != null)
+                            {
+                                boolean.IsTrue = floatValue != 0;
+                            }
+                            else
+                            {
+                                constant = new BoolConstant();
+                                constant.IsTrue = floatValue != 0;
+                                _setLabelTarget.Value = constant;
+
+                                if (_setLabelTarget.Value.Parent == null)
+                                {
+                                    _setLabelValueUi.Value = _setLabelTarget.Value;
+                                }
+                            }
                         }
                     }
 
@@ -387,6 +456,12 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
 
             button = _contextMenu.AddButton("Expression");
             _labelTypeMenuButtons.Add(button, ActiveLabelType.Expression);
+
+            if (_setLabelTarget.Value is IExpression)
+            {
+                button = _contextMenu.AddButton("Operation");
+                _labelTypeMenuButtons.Add(button, ActiveLabelType.Operation);
+            }
         }
 
         private void SetLabelVariableMenuItems()
@@ -402,6 +477,36 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                     _labelVariableMenuButtons.Add(button, itVar);
                 }
             }
+        }
+
+        private void SetNumberOperationMenuItems()
+        {
+            _numberOperationMenuButtons = new Dictionary<MenuButton, Operations>();
+            MenuButton button;
+
+            button = _contextMenu.AddButton("+");
+            _numberOperationMenuButtons.Add(button, Operations.Add);
+
+            button = _contextMenu.AddButton("-");
+            _numberOperationMenuButtons.Add(button, Operations.Substract);
+
+            button = _contextMenu.AddButton("*");
+            _numberOperationMenuButtons.Add(button, Operations.Multiple);
+
+            button = _contextMenu.AddButton("/");
+            _numberOperationMenuButtons.Add(button, Operations.Divide);
+        }
+
+        private void SetLogicOperationMenuItems()
+        {
+            _logicOperationMenuButtons = new Dictionary<MenuButton, LogicOperations>();
+            MenuButton button;
+
+            button = _contextMenu.AddButton("&&");
+            _logicOperationMenuButtons.Add(button, LogicOperations.And);
+
+            button = _contextMenu.AddButton("||");
+            _logicOperationMenuButtons.Add(button, LogicOperations.Or);
         }
 
         private IAlgorithmBlock CreateBlockData(BlockData data)
