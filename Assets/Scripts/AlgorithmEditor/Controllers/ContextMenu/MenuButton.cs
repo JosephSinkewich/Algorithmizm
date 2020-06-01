@@ -2,9 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using Assets.Scripts.AlgorithmEditor.Events;
 
-namespace Assets.Scripts.AlgorithmEditor.Controllers.ContextMenu
+namespace Algorithmizm
 {
     public class MenuButton : MonoBehaviour
     {

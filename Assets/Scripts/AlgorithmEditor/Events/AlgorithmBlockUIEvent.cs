@@ -1,7 +1,6 @@
-﻿using Assets.Scripts.AlgorithmEditor.Controllers.Blocks;
-using UnityEngine.Events;
+﻿using UnityEngine.Events;
 
-namespace Assets.Scripts.AlgorithmEditor.Events
+namespace Algorithmizm
 {
     public class AlgorithmBlockUIEvent : UnityEvent<AlgorithmBlockUI>
     {

@@ -20,6 +20,8 @@ MonoBehaviour:
     - {fileID: 21300000, guid: 38a3b514439aae84cb26f343ed3ff0d6, type: 3}
     - {fileID: 21300000, guid: 61eded0e839638b4793e129752237d0d, type: 3}
     - {fileID: 21300000, guid: d16fd6c2b7893d2448bdfe54c9100548, type: 3}
+    - {fileID: 21300000, guid: b01792a0021dbc2409b1ac85c1f090e5, type: 3}
+    - {fileID: 21300000, guid: 85bcb5473b2c2964f8879e76ecce8abb, type: 3}
     SerializedBytesString: 
     Prefab: {fileID: 0}
     PrefabModificationsReferencedUnityObjects: []
@@ -111,6 +113,56 @@ MonoBehaviour:
     - Name: 
       Entry: 8
       Data: 
+    - Name: _valueTypeSprites
+      Entry: 7
+      Data: 2|System.Collections.Generic.Dictionary`2[[AlgorithmizmModels.Math.ValueType,
+        AlgorithmizmModels],[UnityEngine.Sprite, UnityEngine.CoreModule]], mscorlib
+    - Name: comparer
+      Entry: 7
+      Data: 3|System.Collections.Generic.EnumEqualityComparer`1[[AlgorithmizmModels.Math.ValueType,
+        AlgorithmizmModels]], mscorlib
+    - Name: 
+      Entry: 12
+      Data: 0
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 12
+      Data: 2
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 1
+    - Name: $v
+      Entry: 10
+      Data: 4
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 7
+      Data: 
+    - Name: $k
+      Entry: 3
+      Data: 0
+    - Name: $v
+      Entry: 10
+      Data: 5
+    - Name: 
+      Entry: 8
+      Data: 
+    - Name: 
+      Entry: 13
+      Data: 
+    - Name: 
+      Entry: 8
+      Data: 
   _algorithmBlockPrefab: {fileID: 2567210833967153141, guid: c28fb9bcdcfe8b840bde5fb19794ec15,
     type: 3}
   _activeLabelPrefab: {fileID: 200979371859589216, guid: 5cce735403ee9074196cb3addb4b149d,
@@ -118,6 +170,8 @@ MonoBehaviour:
   _autosizebleTextPrefab: {fileID: 2291730678053807127, guid: 9437d4c793b227b4789e70a47dbf0db3,
     type: 3}
   _valueUiPrefab: {fileID: 4000564014090774829, guid: 490c63c9910bd8a429bbd4c87570c3f9,
+    type: 3}
+  _variableUIPrefab: {fileID: 3895713204418257020, guid: 325eccfd496e9dc4b9b7c051e2688880,
     type: 3}
   _messageDialog: {fileID: 1093427136964555846, guid: 70ddbe308ad8ea741af107e3bde8c6e5,
     type: 3}

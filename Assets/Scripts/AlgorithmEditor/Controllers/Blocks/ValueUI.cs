@@ -1,5 +1,4 @@
 ﻿using UnityEngine;
-using Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders;
 using AlgorithmizmModels.Math;
 using UnityEngine.Events;
 using System.Collections.Generic;

@@ -1,9 +1,8 @@
-﻿using Assets.Scripts.AlgorithmEditor.Events;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace Assets.Scripts.AlgorithmEditor.Controllers.ContextMenu
+namespace Algorithmizm
 {
     public class ContextMenuController : MonoBehaviour
     {

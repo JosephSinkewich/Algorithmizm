@@ -1,8 +1,7 @@
-﻿using Assets.Scripts.AlgorithmEditor.Controllers.Blocks;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine.Events;
 
-namespace Assets.Scripts.AlgorithmEditor.Events
+namespace Algorithmizm
 {
     public class AlgorithmTreeListEvent : UnityEvent<IReadOnlyCollection<AlgorithmBlockUI>>
     {

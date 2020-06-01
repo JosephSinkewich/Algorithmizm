@@ -1,16 +1,11 @@
-﻿using Algorithmizm;
-using AlgorithmizmModels.Blocks;
+﻿using AlgorithmizmModels.Blocks;
 using AlgorithmizmModels.Math;
 using AlgorithmizmModels.Variables;
-using Assets.Scripts.AlgorithmEditor.Controllers.Blocks;
-using Assets.Scripts.AlgorithmEditor.Controllers.ContextMenu;
-using Assets.Scripts.AlgorithmEditor.Controllers.Panels;
-using Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders;
 using Assets.Scripts.AlgorithmEditor.Model;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
+namespace Algorithmizm
 {
     public class MainAlgorithmEditorController : MonoBehaviour
     {
@@ -33,7 +28,7 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
 
         [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
 
-        private AddSteps _addSteps;
+        private AddBlockSteps _addBlockStep;
         private AlgorithmBlockUI _addTarget;
         private bool _addInsertInside;
         private BlockType _addType;
@@ -41,6 +36,10 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
         private Dictionary<MenuButton, BlockType> _addTypeMenuButtons;
         private Dictionary<MenuButton, IAlgorithmBlock> _addBlockMenuButtons;
         private IAlgorithmBlock _addBlockData;
+
+        private AddVariableSteps _addVariableStep;
+        private ValueType _addVariableType;
+        private Dictionary<MenuButton, ValueType> _addVariableTypeMenuButtons;
 
         private SetLabelSteps _setLabelSteps;
         private ActiveLabel _setLabelTarget;
@@ -156,9 +155,9 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
 
         private void AddOnBlock(AlgorithmBlockUI sender)
         {
-            switch (_addSteps)
+            switch (_addBlockStep)
             {
-                case AddSteps.SetTarget:
+                case AddBlockSteps.SetTarget:
                     {
                         _addTarget = sender;
 
@@ -166,7 +165,7 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                         SetAddInsertTypeMenuItems();
                         _contextMenu.gameObject.SetActive(true);
 
-                        _addSteps = AddSteps.ChoiseInsertType;
+                        _addBlockStep = AddBlockSteps.ChoiseInsertType;
                     }
                     break;
             }
@@ -174,9 +173,9 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
 
         private void AddOnContextMenuItem(MenuButton sender)
         {
-            switch (_addSteps)
+            switch (_addBlockStep)
             {
-                case AddSteps.ChoiseInsertType:
+                case AddBlockSteps.ChoiseInsertType:
                     {
                         if (!_addInsertTypeMenuButtons.ContainsKey(sender))
                         {
@@ -188,11 +187,11 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                         ClearContextMenu();
                         SetAddTypeMenuItems();
 
-                        _addSteps = AddSteps.ChoiseBlockType;
+                        _addBlockStep = AddBlockSteps.ChoiseBlockType;
                     }
                     break;
 
-                case AddSteps.ChoiseBlockType:
+                case AddBlockSteps.ChoiseBlockType:
                     {
                         if (!_addTypeMenuButtons.ContainsKey(sender))
                         {
@@ -204,11 +203,11 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
                         ClearContextMenu();
                         SetAddBlocksMenuItems();
 
-                        _addSteps = AddSteps.ChoiseBlock;
+                        _addBlockStep = AddBlockSteps.ChoiseBlock;
                     }
                     break;
 
-                case AddSteps.ChoiseBlock:
+                case AddBlockSteps.ChoiseBlock:
                     {
                         if (!_addBlockMenuButtons.ContainsKey(sender))
                         {
@@ -222,7 +221,7 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
 
                         _editPanel.CurrentTool = EditTools.Cursor;
 
-                        _addSteps = AddSteps.SetBlockData;
+                        _addBlockStep = AddBlockSteps.SetBlockData;
                     }
                     break;
             }
@@ -562,7 +561,8 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
 
         private void AddInit()
         {
-            _addSteps = AddSteps.SetTarget;
+            _addBlockStep = AddBlockSteps.SetTarget;
+            _addVariableStep = AddVariableSteps.SetType;
         }
 
         private void MoveInit()

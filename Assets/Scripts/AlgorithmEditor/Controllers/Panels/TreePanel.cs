@@ -1,13 +1,9 @@
 ﻿using AlgorithmizmModels.Blocks;
-using Assets.Scripts.AlgorithmEditor.Controllers.Blocks;
-using Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using Assets.Scripts.AlgorithmEditor.Events;
-using Algorithmizm;
 
-namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
+namespace Algorithmizm
 {
     public class TreePanel : MonoBehaviour
     {

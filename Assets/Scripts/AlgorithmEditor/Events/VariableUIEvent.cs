@@ -1,9 +1,8 @@
 ﻿using UnityEngine.Events;
 
-
 namespace Algorithmizm
 {
-    public class MenuButtonEvent : UnityEvent<MenuButton>
+    public class VariableUIEvent : UnityEvent<VariableUI>
     {
     }
 }

@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
-using Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders;
 using TMPro;
 using AlgorithmizmModels.Math;
 using AlgorithmizmModels.Variables;

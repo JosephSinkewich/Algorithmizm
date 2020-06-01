@@ -3,14 +3,11 @@ using UnityEngine.Events;
 using AlgorithmizmModels.Blocks;
 using TMPro;
 using UnityEngine.EventSystems;
-using Assets.Scripts.AlgorithmEditor.Events;
 using UnityEngine.UI;
-using Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders;
-using Algorithmizm;
 using System.Collections.Generic;
 using AlgorithmizmModels.Math;
 
-namespace Assets.Scripts.AlgorithmEditor.Controllers.Blocks
+namespace Algorithmizm
 {
     public class AlgorithmBlockUI : MonoBehaviour, IPointerClickHandler
     {

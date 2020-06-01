@@ -1,6 +1,6 @@
-﻿namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
+﻿namespace Algorithmizm
 {
-    enum AddSteps
+    enum AddBlockSteps
     {
         SetTarget,
         ChoiseInsertType,

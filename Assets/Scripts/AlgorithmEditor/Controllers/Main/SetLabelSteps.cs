@@ -1,4 +1,4 @@
-﻿namespace Assets.Scripts.AlgorithmEditor.Controllers.Main
+﻿namespace Algorithmizm
 {
     enum SetLabelSteps
     {
