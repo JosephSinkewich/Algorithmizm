@@ -9,21 +9,11 @@ namespace Algorithmizm
 {
     public class MainAlgorithmEditorController : MonoBehaviour
     {
-        //mock
-        private List<IVariable> _vars = new List<IVariable>()
-        {
-            new FloatVariable() { Name = "float1", Value = 7f },
-            new FloatVariable() { Name = "float2", Value = 2f },
-            new FloatVariable() { Name = "float3", Value = 2.3f },
-            new BoolVariable() { Name = "bool1", IsTrue = false },
-            new BoolVariable() { Name = "bool2", IsTrue = true },
-            new BoolVariable() { Name = "bool3", IsTrue = true },
-        };
-
         [SerializeField] private Transform _canvasTransform;
 
         [SerializeField] private EditPanel _editPanel;
         [SerializeField] private TreePanel _treePanel;
+        [SerializeField] private VariablesPanel _variablesPanel;
         [SerializeField] private ContextMenuController _contextMenu;
 
         [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
@@ -468,7 +458,7 @@ namespace Algorithmizm
             _labelVariableMenuButtons = new Dictionary<MenuButton, IVariable>();
             MenuButton button;
 
-            foreach (IVariable itVar in _vars)
+            foreach (IVariable itVar in _variablesPanel.Variables)
             {
                 if (itVar.Type == _setLabelTarget.ValueType)
                 {
