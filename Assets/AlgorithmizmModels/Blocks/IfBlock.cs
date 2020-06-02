@@ -1,10 +1,14 @@
 ﻿using AlgorithmizmModels.Math;
+using System.Collections.Generic;
 
 namespace AlgorithmizmModels.Blocks
 {
     public class IfBlock : IAlgorithmBlock
     {
-        public string Name { get; set; }
+        public BlockData Data { get; set; }
+        public List<ParameterData> Parameters { get; set; }
+
+        public string Name => "If " + Condition?.ToString();
 
         public IAlgorithmBlock ThenBlock { get; set; }
         public IAlgorithmBlock ElseBlock { get; set; }

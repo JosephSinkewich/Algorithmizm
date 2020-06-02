@@ -1,7 +1,7 @@
-﻿using Assets.AlgorithmizmModels.Primitives;
+﻿using AlgorithmizmModels.Primitives;
 using UnityEngine;
 
-namespace Assets.LevelModule.Components
+namespace LevelModule
 {
     public class BotComponent : LevelObjectComponent
     {

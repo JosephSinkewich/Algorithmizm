@@ -1,4 +1,4 @@
-﻿namespace Assets.AlgorithmizmModels.Primitives
+﻿namespace AlgorithmizmModels.Primitives
 {
     public enum Side
     {

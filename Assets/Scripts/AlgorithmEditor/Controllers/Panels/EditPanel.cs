@@ -2,9 +2,8 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
-using Assets.Scripts.AlgorithmEditor.Events;
 
-namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
+namespace Algorithmizm
 {
     public class EditPanel : MonoBehaviour
     {
@@ -23,8 +22,29 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
             }
             set
             {
-                _currentTool = value;
-                OnToolChanged?.Invoke(_currentTool);
+                switch (value)
+                {
+                    case EditTools.Add:
+                        {
+                            _addToggle.isOn = true;
+                        }
+                        break;
+                    case EditTools.Move:
+                        {
+                            _moveToggle.isOn = true;
+                        }
+                        break;
+                    case EditTools.Delete:
+                        {
+                            _deleteToggle.isOn = true;
+                        }
+                        break;
+                    case EditTools.Cursor:
+                        {
+                            _cursorToggle.isOn = true;
+                        }
+                        break;
+                }
             }
         }
 
@@ -62,7 +82,8 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
         {
             if (value)
             {
-                CurrentTool = EditTools.Add;
+                _currentTool = EditTools.Add;
+                OnToolChanged?.Invoke(_currentTool);
             }
         }
 
@@ -70,7 +91,8 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
         {
             if (value)
             {
-                CurrentTool = EditTools.Move;
+                _currentTool = EditTools.Move;
+                OnToolChanged?.Invoke(_currentTool);
             }
         }
 
@@ -79,7 +101,8 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
         {
             if (value)
             {
-                CurrentTool = EditTools.Delete;
+                _currentTool = EditTools.Delete;
+                OnToolChanged?.Invoke(_currentTool);
             }
         }
 
@@ -88,7 +111,8 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
         {
             if (value)
             {
-                CurrentTool = EditTools.Cursor;
+                _currentTool = EditTools.Cursor;
+                OnToolChanged?.Invoke(_currentTool);
             }
         }
     }

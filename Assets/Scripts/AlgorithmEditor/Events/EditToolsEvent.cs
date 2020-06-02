@@ -1,7 +1,7 @@
 ﻿using Assets.Scripts.AlgorithmEditor.Model;
 using UnityEngine.Events;
 
-namespace Assets.Scripts.AlgorithmEditor.Events
+namespace Algorithmizm
 {
     public class EditToolsEvent : UnityEvent<EditTools>
     {

@@ -1,8 +1,8 @@
-﻿using Assets.AlgorithmizmModels.Level.LevelObjects;
-using Assets.AlgorithmizmModels.Primitives;
+﻿using AlgorithmizmModels.Level;
+using AlgorithmizmModels.Primitives;
 using UnityEngine;
 
-namespace Assets.LevelModule.Components
+namespace LevelModule
 {
     public abstract class LevelObjectComponent : MonoBehaviour
     {

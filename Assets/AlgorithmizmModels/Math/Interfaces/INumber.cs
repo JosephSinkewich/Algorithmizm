@@ -2,6 +2,6 @@
 {
     public interface INumber : IValue
     {
-        double Value { get; }
+        double Value { get; set; }
     }
 }

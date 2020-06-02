@@ -1,8 +1,7 @@
-﻿using Assets.Scripts.AlgorithmEditor.Controllers.ContextMenu;
-using UnityEngine.Events;
+﻿using UnityEngine.Events;
 
 
-namespace Assets.Scripts.AlgorithmEditor.Events
+namespace Algorithmizm
 {
     public class MenuButtonEvent : UnityEvent<MenuButton>
     {

@@ -2,6 +2,6 @@
 {
     public interface IBoolean : IValue
     {
-        bool IsTrue { get; }
+        bool IsTrue { get; set; }
     }
 }

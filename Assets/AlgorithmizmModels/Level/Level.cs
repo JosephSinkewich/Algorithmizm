@@ -1,7 +1,6 @@
-﻿using Assets.AlgorithmizmModels.Level.LevelObjects;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
-namespace Assets.AlgorithmizmModels.Level
+namespace AlgorithmizmModels.Level
 {
     public class Level
     {

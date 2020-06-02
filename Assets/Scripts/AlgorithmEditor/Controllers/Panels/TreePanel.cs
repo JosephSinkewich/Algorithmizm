@@ -1,12 +1,9 @@
 ﻿using AlgorithmizmModels.Blocks;
-using Assets.Scripts.AlgorithmEditor.Controllers.Blocks;
-using Assets.Scripts.AlgorithmEditor.Controllers.ResourceProviders;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-using Assets.Scripts.AlgorithmEditor.Events;
 
-namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
+namespace Algorithmizm
 {
     public class TreePanel : MonoBehaviour
     {
@@ -25,12 +22,19 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
         public UnityEvent<AlgorithmBlockUI> OnBlockClick { get; set; } =
             new AlgorithmBlockUIEvent();
 
+        public UnityEvent<ValueUI, ActiveLabel> OnLabelClick { get; set; } =
+            new ValueUIEvent();
+
+        public UnityEvent<SetBlockUI, ActiveLabel> OnVariableLabelClick { get; set; } =
+            new SetVariableEvent();
+
         public void AddBlock(AlgorithmBlockUI beforeBlock, IAlgorithmBlock newBlockData)
         {
             int index = _blocks.IndexOf(beforeBlock);
 
             AlgorithmBlockUI newBlock = CreateBlock(newBlockData);
-            _blocks.Insert(index, newBlock);
+            
+            _blocks.Insert(index + 1, newBlock);
 
             SetContentSiblings();
 
@@ -51,16 +55,33 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
             foreach (AlgorithmBlockUI itBlock in _blocks)
             {
                 itBlock.OnClick.RemoveListener(BlockClickHandler);
-            }
-            foreach (AlgorithmBlockUI itBlock in _blocks)
-            {
                 itBlock.OnClick.AddListener(BlockClickHandler);
+
+                itBlock.OnLabelClick.RemoveListener(LabelClickHandler);
+                itBlock.OnLabelClick.AddListener(LabelClickHandler);
+
+                if (itBlock is SetBlockUI itSetBlock)
+                {
+                    itSetBlock.OnVariableLabelClick.RemoveListener(VariableLabelClickHandler);
+                    itSetBlock.OnVariableLabelClick.AddListener(VariableLabelClickHandler);
+                }
             }
         }
 
         private AlgorithmBlockUI CreateBlock(IAlgorithmBlock blockData)
         {
-            AlgorithmBlockUI result = Instantiate(_resourceProvider.AlgorithmBlockPrefab, _content);
+            AlgorithmBlockUI result = null;
+            if (blockData.Type == BlockType.Set)
+            {
+                result = Instantiate(_resourceProvider.SetBlockPrefab, _content);
+            }
+            else
+            {
+                result = Instantiate(_resourceProvider.AlgorithmBlockPrefab, _content);
+            }
+            
+            result.BlockData = blockData;
+            result.RefreshAnData();
 
             return result;
         }
@@ -76,6 +97,16 @@ namespace Assets.Scripts.AlgorithmEditor.Controllers.Panels
         private void BlockClickHandler(AlgorithmBlockUI block)
         {
             OnBlockClick?.Invoke(block);
+        }
+
+        private void LabelClickHandler(ValueUI valueUi, ActiveLabel label)
+        {
+            OnLabelClick?.Invoke(valueUi, label);
+        }
+
+        private void VariableLabelClickHandler(SetBlockUI setBlock, ActiveLabel label)
+        {
+            OnVariableLabelClick?.Invoke(setBlock, label);
         }
     }
 }

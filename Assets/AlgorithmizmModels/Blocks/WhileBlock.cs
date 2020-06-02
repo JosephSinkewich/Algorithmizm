@@ -2,9 +2,11 @@
 
 namespace AlgorithmizmModels.Blocks
 {
-    public class WhileBlock
+    public class WhileBlock : IAlgorithmBlock
     {
-        public string Name { get; set; }
+        public BlockData Data { get; set; }
+
+        public string Name => "While " + Condition?.ToString();
 
         public IAlgorithmBlock InnerBlock { get; set; }
         public IAlgorithmBlock OuterBlock { get; set; }
