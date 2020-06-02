@@ -19,18 +19,15 @@ namespace Algorithmizm
         public UnityEvent<VariableUI> OnClick { get; set; } =
             new VariableUIEvent();
 
+        public void OnPointerClick(PointerEventData eventData)
+        {
+            OnClick?.Invoke(this);
+        }
+
         public void RefreshAnData()
         {
             _text.text = VariableData.Name;
             _image.sprite = _resourceProvider.ValueTypeSprites[VariableData.Type];
-        }
-
-        public void OnPointerClick(PointerEventData eventData)
-        {
-            if (eventData.button == PointerEventData.InputButton.Left)
-            {
-                OnClick?.Invoke(this);
-            }
         }
     }
 }

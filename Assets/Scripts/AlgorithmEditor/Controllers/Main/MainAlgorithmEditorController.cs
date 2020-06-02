@@ -20,6 +20,7 @@ namespace Algorithmizm
 
         private AddBlockSteps _addBlockStep;
         private AlgorithmBlockUI _addTarget;
+        private bool _isAddBlock;
         private bool _addInsertInside;
         private BlockType _addType;
         private Dictionary<MenuButton, bool> _addInsertTypeMenuButtons;
@@ -43,6 +44,8 @@ namespace Algorithmizm
         private LogicOperations _logicOperation;
         private Dictionary<MenuButton, LogicOperations> _logicOperationMenuButtons;
 
+        private string _dialogValue;
+
         private void Start()
         {
             AddListeners();
@@ -58,6 +61,8 @@ namespace Algorithmizm
             _editPanel.OnToolChanged.AddListener(ToolChangedHandler);
             _treePanel.OnBlockClick.AddListener(BlockClickHandler);
             _treePanel.OnLabelClick.AddListener(LabelClickHandler);
+            _variablesPanel.OnVariableClick.AddListener(VariableClickHandler);
+            _variablesPanel.OnPanelClick.AddListener(VariablesPanelClickHandler);
             _contextMenu.OnButtonClick.AddListener(ContextMenuItemClickHandler);
         }
 
@@ -105,6 +110,30 @@ namespace Algorithmizm
             }
         }
 
+        private void VariableClickHandler(VariableUI sender)
+        {
+            switch (_editPanel.CurrentTool)
+            {
+                case EditTools.Add:
+                    {
+                        AddOnVariablesPanel();
+                    }
+                    break;
+            }
+        }
+
+        private void VariablesPanelClickHandler()
+        {
+            switch (_editPanel.CurrentTool)
+            {
+                case EditTools.Add:
+                    {
+                        AddOnVariablesPanel();
+                    }
+                    break;
+            }
+        }
+
         private void LabelClickHandler(ValueUI valueUi, ActiveLabel sender)
         {
             if (_editPanel.CurrentTool == EditTools.Cursor)
@@ -132,7 +161,14 @@ namespace Algorithmizm
             {
                 case EditTools.Add:
                     {
-                        AddOnContextMenuItem(sender);
+                        if (_isAddBlock)
+                        {
+                            AddBlockOnContextMenuItem(sender);
+                        }
+                        else
+                        {
+                            AddVariableOnContextMenuItem(sender);
+                        }
                     }
                     break;
                 case EditTools.Cursor:
@@ -150,6 +186,7 @@ namespace Algorithmizm
                 case AddBlockSteps.SetTarget:
                     {
                         _addTarget = sender;
+                        _isAddBlock = true;
 
                         ClearContextMenu();
                         SetAddInsertTypeMenuItems();
@@ -161,7 +198,25 @@ namespace Algorithmizm
             }
         }
 
-        private void AddOnContextMenuItem(MenuButton sender)
+        private void AddOnVariablesPanel()
+        {
+            switch (_addBlockStep)
+            {
+                case AddBlockSteps.SetTarget:
+                    {
+                        _isAddBlock = false;
+
+                        ClearContextMenu();
+                        SetAddVariableTypeMenuItems();
+                        _contextMenu.gameObject.SetActive(true);
+
+                        _addVariableStep = AddVariableSteps.SetType;
+                    }
+                    break;
+            }
+        }
+
+        private void AddBlockOnContextMenuItem(MenuButton sender)
         {
             switch (_addBlockStep)
             {
@@ -212,6 +267,38 @@ namespace Algorithmizm
                         _editPanel.CurrentTool = EditTools.Cursor;
 
                         _addBlockStep = AddBlockSteps.SetBlockData;
+                    }
+                    break;
+            }
+        }
+
+        private void AddVariableOnContextMenuItem(MenuButton sender)
+        {
+            switch (_addVariableStep)
+            {
+                case AddVariableSteps.SetType:
+                    {
+                        if (!_addVariableTypeMenuButtons.ContainsKey(sender))
+                        {
+                            return;
+                        }
+
+                        _addVariableType = _addVariableTypeMenuButtons[sender];
+                        _contextMenu.gameObject.SetActive(false);
+
+                        IVariable newVariable = null;
+
+                        if (_addVariableType == ValueType.Bool)
+                        {
+                            newVariable = new BoolVariable();
+                        }
+                        else
+                        {
+                            newVariable = new FloatVariable();
+                        }
+
+                        _addVariableStep = AddVariableSteps.SetName;
+                        SetVariableNameFromDialog(newVariable);
                     }
                     break;
             }
@@ -384,6 +471,20 @@ namespace Algorithmizm
                 });
         }
 
+        private void SetVariableNameFromDialog(IVariable variable)
+        {
+            SetValueDialog setDialog = Instantiate(_resourceProvider.SetValueDialog, _canvasTransform);
+
+            setDialog.Init("Variable Name:", "VariableName");
+
+            setDialog.OnOk.AddListener(
+                (valueString) => 
+                {
+                    variable.Name = valueString;
+                    _variablesPanel.AddVariable(variable);
+                });
+        }
+
         private void SetAddInsertTypeMenuItems()
         {
             _addInsertTypeMenuButtons = new Dictionary<MenuButton, bool>();
@@ -430,6 +531,18 @@ namespace Algorithmizm
                 MenuButton button = _contextMenu.AddButton(itData.name);
                 _addBlockMenuButtons.Add(button, blockData);
             }
+        }
+
+        private void SetAddVariableTypeMenuItems()
+        {
+            _addVariableTypeMenuButtons = new Dictionary<MenuButton, ValueType>();
+            MenuButton button;
+
+            button = _contextMenu.AddButton("Boolean");
+            _addVariableTypeMenuButtons.Add(button, ValueType.Bool);
+
+            button = _contextMenu.AddButton("Number");
+            _addVariableTypeMenuButtons.Add(button, ValueType.Number);
         }
 
         private void SetLabelTypeMenuItems()

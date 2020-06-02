@@ -3764,7 +3764,7 @@ MonoBehaviour:
   _canvasTransform: {fileID: 173561832}
   _editPanel: {fileID: 1159240174}
   _treePanel: {fileID: 92202285}
-  _variablesPanel: {fileID: 0}
+  _variablesPanel: {fileID: 493665932}
   _contextMenu: {fileID: 1550921214}
   _resourceProvider: {fileID: 11400000, guid: e9e0b486cd3324945957bad783284c5b, type: 2}
 --- !u!1 &1550921208

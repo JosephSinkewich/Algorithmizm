@@ -28,6 +28,8 @@ namespace Algorithmizm
 
         public void AddVariable(IVariable newVariable)
         {
+            Variables.Add(newVariable);
+
             VariableUI newVariableUI = CreateVaribale(newVariable);
 
             _variablesUIs.Add(newVariableUI);
