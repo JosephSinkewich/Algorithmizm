@@ -12,6 +12,7 @@ namespace Algorithmizm
     public class AlgorithmTreeResourceProvider : SerializedScriptableObject
     {
         [SerializeField] private AlgorithmBlockUI _algorithmBlockPrefab;
+        [SerializeField] private SetBlockUI _setBlockPrefab;
         [SerializeField] private ActiveLabel _activeLabelPrefab;
         [SerializeField] private TextMeshProUGUI _autosizebleTextPrefab;
         [SerializeField] private ValueUI _valueUiPrefab;
@@ -30,6 +31,7 @@ namespace Algorithmizm
         [SerializeField] private Color _activeLabelErrorColor;
 
         public AlgorithmBlockUI AlgorithmBlockPrefab => _algorithmBlockPrefab;
+        public SetBlockUI SetBlockPrefab => _setBlockPrefab;
         public ActiveLabel ActiveLabelPrefab => _activeLabelPrefab;
         public TextMeshProUGUI AutosizebleTextPrefab => _autosizebleTextPrefab;
         public ValueUI ValueUiPrefab => _valueUiPrefab;

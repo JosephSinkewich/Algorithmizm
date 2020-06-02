@@ -25,6 +25,9 @@ namespace Algorithmizm
         public UnityEvent<ValueUI, ActiveLabel> OnLabelClick { get; set; } =
             new ValueUIEvent();
 
+        public UnityEvent<SetBlockUI, ActiveLabel> OnVariableLabelClick { get; set; } =
+            new SetVariableEvent();
+
         public void AddBlock(AlgorithmBlockUI beforeBlock, IAlgorithmBlock newBlockData)
         {
             int index = _blocks.IndexOf(beforeBlock);
@@ -56,12 +59,27 @@ namespace Algorithmizm
 
                 itBlock.OnLabelClick.RemoveListener(LabelClickHandler);
                 itBlock.OnLabelClick.AddListener(LabelClickHandler);
+
+                if (itBlock is SetBlockUI itSetBlock)
+                {
+                    itSetBlock.OnVariableLabelClick.RemoveListener(VariableLabelClickHandler);
+                    itSetBlock.OnVariableLabelClick.AddListener(VariableLabelClickHandler);
+                }
             }
         }
 
         private AlgorithmBlockUI CreateBlock(IAlgorithmBlock blockData)
         {
-            AlgorithmBlockUI result = Instantiate(_resourceProvider.AlgorithmBlockPrefab, _content);
+            AlgorithmBlockUI result = null;
+            if (blockData.Type == BlockType.Set)
+            {
+                result = Instantiate(_resourceProvider.SetBlockPrefab, _content);
+            }
+            else
+            {
+                result = Instantiate(_resourceProvider.AlgorithmBlockPrefab, _content);
+            }
+            
             result.BlockData = blockData;
             result.RefreshAnData();
 
@@ -84,6 +102,11 @@ namespace Algorithmizm
         private void LabelClickHandler(ValueUI valueUi, ActiveLabel label)
         {
             OnLabelClick?.Invoke(valueUi, label);
+        }
+
+        private void VariableLabelClickHandler(SetBlockUI setBlock, ActiveLabel label)
+        {
+            OnVariableLabelClick?.Invoke(setBlock, label);
         }
     }
 }

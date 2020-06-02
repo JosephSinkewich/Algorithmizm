@@ -7,7 +7,7 @@ namespace AlgorithmizmModels.Blocks
     {
         public BlockData Data { get; set; }
 
-        public string Name => Variable?.ToString() + " = " + Value?.ToString();
+        public string Name => "=";
         public IAlgorithmBlock Next { get; set; }
         public BlockType Type => BlockType.Set;
 

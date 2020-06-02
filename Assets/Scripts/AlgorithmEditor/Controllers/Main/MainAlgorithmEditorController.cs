@@ -34,6 +34,8 @@ namespace Algorithmizm
 
         private SetLabelSteps _setLabelSteps;
         private ActiveLabel _setLabelTarget;
+        private bool _isSetedLabelVariable;
+        private SetBlockUI _setVariableBlock;
         private ValueUI _setLabelValueUi;
         private ActiveLabelType _activeLabelType;
         private Dictionary<MenuButton, ActiveLabelType> _labelTypeMenuButtons;
@@ -59,18 +61,28 @@ namespace Algorithmizm
         private void AddListeners()
         {
             _editPanel.OnToolChanged.AddListener(ToolChangedHandler);
+
             _treePanel.OnBlockClick.AddListener(BlockClickHandler);
             _treePanel.OnLabelClick.AddListener(LabelClickHandler);
+            _treePanel.OnVariableLabelClick.AddListener(VariableLabelClickHandler);
+
             _variablesPanel.OnVariableClick.AddListener(VariableClickHandler);
             _variablesPanel.OnPanelClick.AddListener(VariablesPanelClickHandler);
+
             _contextMenu.OnButtonClick.AddListener(ContextMenuItemClickHandler);
         }
 
         private void RemoveListeners()
         {
             _editPanel.OnToolChanged.RemoveListener(ToolChangedHandler);
+
             _treePanel.OnBlockClick.RemoveListener(BlockClickHandler);
             _treePanel.OnLabelClick.RemoveListener(LabelClickHandler);
+            _treePanel.OnVariableLabelClick.RemoveListener(VariableLabelClickHandler);
+
+            _variablesPanel.OnVariableClick.RemoveListener(VariableClickHandler);
+            _variablesPanel.OnPanelClick.RemoveListener(VariablesPanelClickHandler);
+
             _contextMenu.OnButtonClick.RemoveListener(ContextMenuItemClickHandler);
         }
 
@@ -143,11 +155,35 @@ namespace Algorithmizm
                     case SetLabelSteps.SetTarget:
                         {
                             _setLabelTarget = sender;
+                            _isSetedLabelVariable = false;
                             _setLabelValueUi = valueUi;
 
                             _setLabelSteps = SetLabelSteps.ChoiseLabelType;
                             ClearContextMenu();
                             SetLabelTypeMenuItems();
+                            _contextMenu.gameObject.SetActive(true);
+                        }
+                        break;
+                }
+            }
+        }
+
+        private void VariableLabelClickHandler(SetBlockUI setBlock, ActiveLabel sender)
+        {
+            if (_editPanel.CurrentTool == EditTools.Cursor)
+            {
+                switch (_setLabelSteps)
+                {
+                    case SetLabelSteps.SetTarget:
+                        {
+                            _setLabelTarget = sender;
+                            _isSetedLabelVariable = true;
+                            _setVariableBlock = setBlock;
+                            _activeLabelType = ActiveLabelType.Variable;
+
+                            _setLabelSteps = SetLabelSteps.SetValue;
+                            ClearContextMenu();
+                            SetVariableMenuItems();
                             _contextMenu.gameObject.SetActive(true);
                         }
                         break;
@@ -380,13 +416,23 @@ namespace Algorithmizm
                         }
                         else if (_activeLabelType == ActiveLabelType.Variable)
                         {
-                            _setLabelTarget.Value = _labelVariableMenuButtons[sender];
-
-                            if (_setLabelTarget.Value.Parent == null)
+                            if (_isSetedLabelVariable)
                             {
-                                _setLabelValueUi.Value = _setLabelTarget.Value;
+                                _setLabelTarget.Value = _labelVariableMenuButtons[sender];
+                                _setVariableBlock.SetBlock.Variable = _labelVariableMenuButtons[sender];
+
+                                _setVariableBlock.RefreshParameter();
                             }
-                            _setLabelValueUi.RebuildAnValue();
+                            else
+                            {
+                                _setLabelTarget.Value = _labelVariableMenuButtons[sender];
+
+                                if (_setLabelTarget.Value.Parent == null)
+                                {
+                                    _setLabelValueUi.Value = _setLabelTarget.Value;
+                                }
+                                _setLabelValueUi.RebuildAnValue();
+                            }
                         }
 
                         _contextMenu.gameObject.SetActive(false);
@@ -578,6 +624,18 @@ namespace Algorithmizm
                     button = _contextMenu.AddButton(itVar.Name);
                     _labelVariableMenuButtons.Add(button, itVar);
                 }
+            }
+        }
+
+        private void SetVariableMenuItems()
+        {
+            _labelVariableMenuButtons = new Dictionary<MenuButton, IVariable>();
+            MenuButton button;
+
+            foreach (IVariable itVar in _variablesPanel.Variables)
+            {
+                button = _contextMenu.AddButton(itVar.Name);
+                _labelVariableMenuButtons.Add(button, itVar);
             }
         }
 

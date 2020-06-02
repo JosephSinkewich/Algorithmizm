@@ -29,6 +29,12 @@ namespace Algorithmizm
 
         public void RefreshAnData()
         {
+            foreach (ValueUI itValue in _valueUis)
+            {
+                Destroy(itValue.gameObject);
+            }
+            _valueUis.Clear();
+
             foreach (ParameterData itParameter in BlockData.Data.parameters)
             {
                 InitParameter(itParameter);
