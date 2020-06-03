@@ -20,6 +20,8 @@ namespace Algorithmizm
 
         public IReadOnlyCollection<AlgorithmBlockUI> Blocks => _blocks;
 
+        public BeginBlock BeginBlock => _beginBlock.BlockData as BeginBlock;
+
         public UnityEvent<IReadOnlyCollection<AlgorithmBlockUI>> OnTreeChanged { get; set; } =
             new AlgorithmTreeListEvent();
 
@@ -40,17 +42,17 @@ namespace Algorithmizm
 
             if (isInside)
             {
-                beforeBlock.NextBlock = newBlock;
+                beforeBlock.InnerBlock = newBlock;
             }
             else
             {
-                beforeBlock.AlternativeNextBlock = newBlock;
+                beforeBlock.NextBlock = newBlock;
                 index = FindOutsidePosition(beforeBlock);
             }
             
             _blocks.Insert(index, newBlock);
 
-            newBlock.PrevBlock = beforeBlock;
+            newBlock.MainPrevBlock = beforeBlock;
             newBlock.IsInsidePrevBlock = isInside;
             newBlock.RefreshAnData();
 

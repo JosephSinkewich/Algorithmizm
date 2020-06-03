@@ -2,9 +2,9 @@
 using AlgorithmizmModels.Math;
 using AlgorithmizmModels.Variables;
 using Assets.Scripts.AlgorithmEditor.Model;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Algorithmizm
 {
@@ -15,7 +15,10 @@ namespace Algorithmizm
         [SerializeField] private EditPanel _editPanel;
         [SerializeField] private TreePanel _treePanel;
         [SerializeField] private VariablesPanel _variablesPanel;
+
         [SerializeField] private ContextMenuController _contextMenu;
+
+        [SerializeField] private Button _doneButton;
 
         [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
 
@@ -46,10 +49,10 @@ namespace Algorithmizm
         private Dictionary<MenuButton, Operations> _numberOperationMenuButtons;
         private LogicOperations _logicOperation;
         private Dictionary<MenuButton, LogicOperations> _logicOperationMenuButtons;
-        private Relations _relation; 
+        private Relations _relation;
         private Dictionary<MenuButton, Relations> _relationMenuButtons;
 
-        private string _dialogValue;
+        public Algorithm Algorithm { get; set; }
 
         private void Start()
         {
@@ -73,6 +76,8 @@ namespace Algorithmizm
             _variablesPanel.OnPanelClick.AddListener(VariablesPanelClickHandler);
 
             _contextMenu.OnButtonClick.AddListener(ContextMenuItemClickHandler);
+
+            _doneButton.onClick.AddListener(DoneButtonClickHandler);
         }
 
         private void RemoveListeners()
@@ -87,6 +92,8 @@ namespace Algorithmizm
             _variablesPanel.OnPanelClick.RemoveListener(VariablesPanelClickHandler);
 
             _contextMenu.OnButtonClick.RemoveListener(ContextMenuItemClickHandler);
+
+            _doneButton.onClick.RemoveListener(DoneButtonClickHandler);
         }
 
         private void ToolChangedHandler(EditTools tool)
@@ -226,7 +233,7 @@ namespace Algorithmizm
                     {
                         _addTarget = sender;
                         _isAddBlock = true;
-                        
+
                         ClearContextMenu();
 
                         if (_addTarget.BlockData.Type == BlockType.If
@@ -240,7 +247,7 @@ namespace Algorithmizm
                         else
                         {
                             _addInsertInside = false;
-                            
+
                             SetAddTypeMenuItems();
                             _contextMenu.gameObject.SetActive(true);
 
@@ -388,7 +395,7 @@ namespace Algorithmizm
                                 _setLabelValueUi.Value = _setLabelTarget.Value;
                             }
                             _setLabelValueUi.RebuildAnValue();
-                            
+
                             _contextMenu.gameObject.SetActive(false);
                             _setLabelSteps = SetLabelSteps.SetTarget;
                         }
@@ -422,7 +429,7 @@ namespace Algorithmizm
                         else if (_activeLabelType == ActiveLabelType.Condition)
                         {
                             _setLabelTarget.Value = new Condition();
-                            
+
                             if (_setLabelTarget.Value.Parent == null)
                             {
                                 _setLabelValueUi.Value = _setLabelTarget.Value;
@@ -571,7 +578,7 @@ namespace Algorithmizm
             setDialog.Init("Variable Name:", "VariableName");
 
             setDialog.OnOk.AddListener(
-                (valueString) => 
+                (valueString) =>
                 {
                     variable.Name = valueString;
                     _variablesPanel.AddVariable(variable);
@@ -820,6 +827,96 @@ namespace Algorithmizm
             {
                 Destroy(item.gameObject);
             }
+        }
+
+        private void DoneButtonClickHandler()
+        {
+            InitAlgorithmBlocks();
+
+            Algorithm = new Algorithm();
+            Algorithm.BeginBlock = _treePanel.BeginBlock;
+            Algorithm.Variables = _variablesPanel.Variables;
+        }
+
+        private void InitAlgorithmBlocks()
+        {
+            foreach (AlgorithmBlockUI itBlock in _treePanel.Blocks)
+            {
+                AlgorithmBlockUI nextBlock = itBlock.NextBlock;
+                if (nextBlock == null)
+                {
+                    nextBlock = FindNextForBlock(itBlock);
+                }
+
+                switch (itBlock.BlockData)
+                {
+                    case BeginBlock beginBlock:
+                        {
+                            beginBlock.Next = nextBlock?.BlockData;
+                        }
+                        break;
+                    case ActionBlock actionBlock:
+                        {
+                            actionBlock.Next = nextBlock?.BlockData;
+                        }
+                        break;
+                    case SetBlock setBlock:
+                        {
+                            setBlock.Next = nextBlock?.BlockData;
+
+                            setBlock.Value = itBlock.ValueUis[0].Value;
+                        }
+                        break;
+                    case IfBlock ifBlock:
+                        {
+                            ifBlock.ElseBlock = nextBlock?.BlockData;
+
+                            ifBlock.ThenBlock = itBlock.InnerBlock?.BlockData;
+                            ifBlock.Condition = itBlock.ValueUis[0].Value as IBoolean;
+                        }
+                        break;
+                    case WhileBlock whileBlock:
+                        {
+                            whileBlock.OuterBlock = nextBlock?.BlockData;
+
+                            whileBlock.InnerBlock = itBlock.InnerBlock?.BlockData;
+                            whileBlock.Condition = itBlock.ValueUis[0].Value as IBoolean;
+                        }
+                        break;
+                }
+            }
+        }
+
+        private AlgorithmBlockUI FindNextForBlock(AlgorithmBlockUI block)
+        {
+            AlgorithmBlockUI currentBlock = block.MainPrevBlock;
+
+            while (currentBlock != null)
+            {
+                if (currentBlock.TabulationLevel < block.TabulationLevel)
+                {
+                    if (currentBlock.BlockData.Type == BlockType.While)
+                    {
+                        break;
+                    }
+                    else if (currentBlock.BlockData.Type == BlockType.If)
+                    {
+                        AlgorithmBlockUI prevBlock = currentBlock;
+                        currentBlock = currentBlock.NextBlock;
+
+                        if (currentBlock == null)
+                        {
+                            currentBlock = FindNextForBlock(prevBlock);
+                        }
+
+                        break;
+                    }
+                }
+
+                currentBlock = currentBlock.MainPrevBlock;
+            }
+
+            return currentBlock;
         }
     }
 }
