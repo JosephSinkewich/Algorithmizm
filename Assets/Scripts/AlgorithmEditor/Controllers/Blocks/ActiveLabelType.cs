@@ -5,6 +5,7 @@
         Variable,
         Constant,
         Expression,
-        Operation
+        Operation,
+        Condition
     }
 }
