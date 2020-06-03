@@ -2,6 +2,7 @@
 using AlgorithmizmModels.Math;
 using AlgorithmizmModels.Variables;
 using Assets.Scripts.AlgorithmEditor.Model;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -45,6 +46,8 @@ namespace Algorithmizm
         private Dictionary<MenuButton, Operations> _numberOperationMenuButtons;
         private LogicOperations _logicOperation;
         private Dictionary<MenuButton, LogicOperations> _logicOperationMenuButtons;
+        private Relations _relation; 
+        private Dictionary<MenuButton, Relations> _relationMenuButtons;
 
         private string _dialogValue;
 
@@ -223,12 +226,26 @@ namespace Algorithmizm
                     {
                         _addTarget = sender;
                         _isAddBlock = true;
-
+                        
                         ClearContextMenu();
-                        SetAddInsertTypeMenuItems();
-                        _contextMenu.gameObject.SetActive(true);
 
-                        _addBlockStep = AddBlockSteps.ChoiseInsertType;
+                        if (_addTarget.BlockData.Type == BlockType.If
+                            || _addTarget.BlockData.Type == BlockType.While)
+                        {
+                            SetAddInsertTypeMenuItems();
+                            _contextMenu.gameObject.SetActive(true);
+
+                            _addBlockStep = AddBlockSteps.ChoiseInsertType;
+                        }
+                        else
+                        {
+                            _addInsertInside = false;
+                            
+                            SetAddTypeMenuItems();
+                            _contextMenu.gameObject.SetActive(true);
+
+                            _addBlockStep = AddBlockSteps.ChoiseBlockType;
+                        }
                     }
                     break;
             }
@@ -298,7 +315,8 @@ namespace Algorithmizm
                         _contextMenu.gameObject.SetActive(false);
 
                         _addBlockData = _addBlockMenuButtons[sender];
-                        _treePanel.AddBlock(_addTarget, _addBlockData);
+
+                        _treePanel.AddBlock(_addTarget, _addBlockData, _addInsertInside);
 
                         _editPanel.CurrentTool = EditTools.Cursor;
 
@@ -383,16 +401,36 @@ namespace Algorithmizm
                         }
                         else if (_activeLabelType == ActiveLabelType.Operation)
                         {
-                            if (_setLabelTarget.ValueType == ValueType.Bool)
+                            if (_setLabelTarget.LabelType == ActiveLabelType.Condition)
                             {
-                                SetLogicOperationMenuItems();
+                                SetRelationMenuItems();
                             }
                             else
                             {
-                                SetNumberOperationMenuItems();
+                                if (_setLabelTarget.ValueType == ValueType.Bool)
+                                {
+                                    SetLogicOperationMenuItems();
+                                }
+                                else
+                                {
+                                    SetNumberOperationMenuItems();
+                                }
                             }
 
                             _setLabelSteps = SetLabelSteps.SetValue;
+                        }
+                        else if (_activeLabelType == ActiveLabelType.Condition)
+                        {
+                            _setLabelTarget.Value = new Condition();
+                            
+                            if (_setLabelTarget.Value.Parent == null)
+                            {
+                                _setLabelValueUi.Value = _setLabelTarget.Value;
+                            }
+                            _setLabelValueUi.RebuildAnValue();
+
+                            _contextMenu.gameObject.SetActive(false);
+                            _setLabelSteps = SetLabelSteps.SetTarget;
                         }
                     }
                     break;
@@ -401,15 +439,24 @@ namespace Algorithmizm
                     {
                         if (_activeLabelType == ActiveLabelType.Operation)
                         {
-                            if (_setLabelTarget.ValueType == ValueType.Bool)
+
+                            if (_setLabelTarget.LabelType == ActiveLabelType.Condition)
                             {
-                                LogicExpression logicExpression = _setLabelTarget.Value as LogicExpression;
-                                logicExpression .Operation = _logicOperationMenuButtons[sender];
+                                Condition condition = _setLabelTarget.Value as Condition;
+                                condition.Relation = _relationMenuButtons[sender];
                             }
                             else
                             {
-                                Expression numberExpression = _setLabelTarget.Value as Expression;
-                                numberExpression.Operation = _numberOperationMenuButtons[sender];
+                                if (_setLabelTarget.ValueType == ValueType.Bool)
+                                {
+                                    LogicExpression logicExpression = _setLabelTarget.Value as LogicExpression;
+                                    logicExpression.Operation = _logicOperationMenuButtons[sender];
+                                }
+                                else
+                                {
+                                    Expression numberExpression = _setLabelTarget.Value as Expression;
+                                    numberExpression.Operation = _numberOperationMenuButtons[sender];
+                                }
                             }
 
                             _setLabelValueUi.RebuildAnValue();
@@ -605,7 +652,13 @@ namespace Algorithmizm
             button = _contextMenu.AddButton("Expression");
             _labelTypeMenuButtons.Add(button, ActiveLabelType.Expression);
 
-            if (_setLabelTarget.Value is IExpression)
+            if (_setLabelTarget.ValueType == ValueType.Bool)
+            {
+                button = _contextMenu.AddButton("Condition");
+                _labelTypeMenuButtons.Add(button, ActiveLabelType.Condition);
+            }
+
+            if (_setLabelTarget.Value is IExpression || _setLabelTarget.Value is Condition)
             {
                 button = _contextMenu.AddButton("Operation");
                 _labelTypeMenuButtons.Add(button, ActiveLabelType.Operation);
@@ -667,6 +720,30 @@ namespace Algorithmizm
 
             button = _contextMenu.AddButton("||");
             _logicOperationMenuButtons.Add(button, LogicOperations.Or);
+        }
+
+        private void SetRelationMenuItems()
+        {
+            _relationMenuButtons = new Dictionary<MenuButton, Relations>();
+            MenuButton button;
+
+            button = _contextMenu.AddButton("==");
+            _relationMenuButtons.Add(button, Relations.Equal);
+
+            button = _contextMenu.AddButton("<");
+            _relationMenuButtons.Add(button, Relations.Less);
+
+            button = _contextMenu.AddButton("<=");
+            _relationMenuButtons.Add(button, Relations.LessEqual);
+
+            button = _contextMenu.AddButton(">");
+            _relationMenuButtons.Add(button, Relations.More);
+
+            button = _contextMenu.AddButton(">=");
+            _relationMenuButtons.Add(button, Relations.MoreEqual);
+
+            button = _contextMenu.AddButton("!=");
+            _relationMenuButtons.Add(button, Relations.NotEqual);
         }
 
         private IAlgorithmBlock CreateBlockData(BlockData data)

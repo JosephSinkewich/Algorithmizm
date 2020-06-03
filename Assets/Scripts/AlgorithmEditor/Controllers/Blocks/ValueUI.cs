@@ -30,21 +30,21 @@ namespace Algorithmizm
         private void Build()
         {
             IValue value = Value;
-            _expressionParts = CreateExpression(ref value);
+            _expressionParts = CreateExpression(ref value, Type);
             SetContentSiblings();
             Value = value;
         }
 
-        private List<GameObject> CreateExpression(ref IValue value)
+        private List<GameObject> CreateExpression(ref IValue value, ValueType type)
         {
             List<GameObject> result = new List<GameObject>();
 
             if (value == null)
             {
                 ActiveLabel variableLabel = CreateActiveLabel();
-                variableLabel.ValueType = Type;
+                variableLabel.ValueType = type;
 
-                switch (Type)
+                switch (variableLabel.ValueType)
                 {
                     case ValueType.Bool:
                         {
@@ -65,7 +65,7 @@ namespace Algorithmizm
 
                 result.Add(variableLabel.gameObject);
             }
-            else if (value is IExpression)
+            else if (value is IExpression || value is Condition)
             {
                 List<GameObject> leftValue = new List<GameObject>();
                 ActiveLabel operation = null;
@@ -74,7 +74,7 @@ namespace Algorithmizm
                 if (value is Expression expression)
                 {
                     IValue value1 = expression.Value1;
-                    leftValue = CreateExpression(ref value1);
+                    leftValue = CreateExpression(ref value1, ValueType.Number);
                     expression.Value1 = (INumber)value1;
 
                     operation = CreateActiveLabel();
@@ -82,13 +82,13 @@ namespace Algorithmizm
                     operation.Value = expression;
 
                     IValue value2 = expression.Value2;
-                    rightValue = CreateExpression(ref value2);
+                    rightValue = CreateExpression(ref value2, ValueType.Number);
                     expression.Value2 = (INumber)value2;
                 }
                 else if (value is LogicExpression logicExpression)
                 {
                     IValue bool1 = logicExpression.Boolean1;
-                    leftValue = CreateExpression(ref bool1);
+                    leftValue = CreateExpression(ref bool1, ValueType.Bool);
                     logicExpression.Boolean1 = (IBoolean)bool1;
 
                     operation = CreateActiveLabel();
@@ -96,10 +96,24 @@ namespace Algorithmizm
                     operation.Value = logicExpression;
 
                     IValue bool2 = logicExpression.Boolean2;
-                    rightValue = CreateExpression(ref bool2);
+                    rightValue = CreateExpression(ref bool2, ValueType.Bool);
                     logicExpression.Boolean2 = (IBoolean)bool2;
                 }
+                else if (value is Condition condition)
+                {
+                    IValue num1 = condition.Value1;
+                    leftValue = CreateExpression(ref num1, ValueType.Number);
+                    condition.Value1 = (INumber)num1;
 
+                    operation = CreateActiveLabel();
+                    operation.LabelType = ActiveLabelType.Condition;
+                    operation.Value = condition;
+
+                    IValue num2 = condition.Value2;
+                    rightValue = CreateExpression(ref num2, ValueType.Number);
+                    condition.Value2 = (INumber)num2;
+                }
+                
                 TextMeshProUGUI leftParanthesis = CreateTextBlock();
                 leftParanthesis.text = "(";
                 TextMeshProUGUI rightParanthesis = CreateTextBlock();

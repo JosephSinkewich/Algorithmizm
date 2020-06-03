@@ -24,6 +24,8 @@ namespace Algorithmizm
 
                     Expression expression = _value.Parent as Expression;
                     LogicExpression logicExpression = _value.Parent as LogicExpression;
+                    Condition condition = _value.Parent as Condition;
+
                     if (expression != null)
                     {
                         if (expression.Value1 == _value)
@@ -49,6 +51,20 @@ namespace Algorithmizm
                         {
                             _value = value;
                             logicExpression.Boolean2 = (IBoolean)_value;
+                        }
+                    }
+
+                    if (condition != null)
+                    {
+                        if (condition.Value1 == _value)
+                        {
+                            _value = value;
+                            condition.Value1 = (INumber)_value;
+                        }
+                        else
+                        {
+                            _value = value;
+                            condition.Value2 = (INumber)_value;
                         }
                     }
                 }
@@ -116,6 +132,10 @@ namespace Algorithmizm
             {
                 _label.text = LogicOperationToString(logicExpression.Operation);
             }
+            else if (Value is Condition condition)
+            {
+                _label.text = RelationToString(condition.Relation);
+            }
         }
 
         private string OperationToString(Operations operation)
@@ -143,6 +163,27 @@ namespace Algorithmizm
                     return "&&";
                 case LogicOperations.Or:
                     return "||";
+                default:
+                    return "???";
+            }
+        }
+
+        private string RelationToString(Relations operation)
+        {
+            switch (operation)
+            {
+                case Relations.Equal:
+                    return "==";
+                case Relations.Less:
+                    return "<";
+                case Relations.LessEqual:
+                    return "<=";
+                case Relations.More:
+                    return ">";
+                case Relations.MoreEqual:
+                    return ">=";
+                case Relations.NotEqual:
+                    return "!=";
                 default:
                     return "???";
             }

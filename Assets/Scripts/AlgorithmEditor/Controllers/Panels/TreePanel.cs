@@ -7,12 +7,16 @@ namespace Algorithmizm
 {
     public class TreePanel : MonoBehaviour
     {
+        private const int UPDATE_PERIOD = 15;
+
         [SerializeField] private Transform _content;
         [SerializeField] private AlgorithmBlockUI _beginBlock;
 
         [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
 
         private List<AlgorithmBlockUI> _blocks = new List<AlgorithmBlockUI>();
+
+        private int _fixedUpdateCounter;
 
         public IReadOnlyCollection<AlgorithmBlockUI> Blocks => _blocks;
 
@@ -28,18 +32,51 @@ namespace Algorithmizm
         public UnityEvent<SetBlockUI, ActiveLabel> OnVariableLabelClick { get; set; } =
             new SetVariableEvent();
 
-        public void AddBlock(AlgorithmBlockUI beforeBlock, IAlgorithmBlock newBlockData)
+        public void AddBlock(AlgorithmBlockUI beforeBlock, IAlgorithmBlock newBlockData, bool isInside)
         {
-            int index = _blocks.IndexOf(beforeBlock);
+            int index = _blocks.IndexOf(beforeBlock) + 1;
 
             AlgorithmBlockUI newBlock = CreateBlock(newBlockData);
+
+            if (isInside)
+            {
+                beforeBlock.NextBlock = newBlock;
+            }
+            else
+            {
+                beforeBlock.AlternativeNextBlock = newBlock;
+                index = FindOutsidePosition(beforeBlock);
+            }
             
-            _blocks.Insert(index + 1, newBlock);
+            _blocks.Insert(index, newBlock);
+
+            newBlock.PrevBlock = beforeBlock;
+            newBlock.IsInsidePrevBlock = isInside;
+            newBlock.RefreshAnData();
 
             SetContentSiblings();
 
             RefreshTreeBlocksListeners();
             OnTreeChanged?.Invoke(_blocks);
+        }
+
+        private int FindOutsidePosition(AlgorithmBlockUI block)
+        {
+            int blockIndex = _blocks.IndexOf(block) + 1;
+
+            while (blockIndex < _blocks.Count)
+            {
+                if (_blocks[blockIndex].TabulationLevel > block.TabulationLevel)
+                {
+                    blockIndex++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            return blockIndex;
         }
 
         private void Start()
@@ -48,6 +85,19 @@ namespace Algorithmizm
             _blocks.Add(_beginBlock);
 
             RefreshTreeBlocksListeners();
+        }
+
+        private void FixedUpdate()
+        {
+            _fixedUpdateCounter++;
+
+            if (_fixedUpdateCounter >= UPDATE_PERIOD)
+            {
+                _fixedUpdateCounter = 0;
+
+                _beginBlock.gameObject.SetActive(false);
+                _beginBlock.gameObject.SetActive(true);
+            }
         }
 
         private void RefreshTreeBlocksListeners()
@@ -81,7 +131,6 @@ namespace Algorithmizm
             }
             
             result.BlockData = blockData;
-            result.RefreshAnData();
 
             return result;
         }

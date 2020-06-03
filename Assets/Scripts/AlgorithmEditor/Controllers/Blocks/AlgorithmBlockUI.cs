@@ -11,6 +11,8 @@ namespace Algorithmizm
 {
     public class AlgorithmBlockUI : MonoBehaviour, IPointerClickHandler
     {
+        private const float ONE_TAB_LENGTH = 64;
+
         [SerializeField] private RectTransform _tabulation;
         [SerializeField] private TextMeshProUGUI _text;
         [SerializeField] private Image _image;
@@ -21,6 +23,16 @@ namespace Algorithmizm
 
         public IAlgorithmBlock BlockData { get; set; }
 
+        private float _tabulationHeight;
+
+        public int TabulationLevel { get; set; }
+
+        public AlgorithmBlockUI PrevBlock { get; set; }
+        public bool IsInsidePrevBlock { get; set; }
+
+        public AlgorithmBlockUI NextBlock { get; set; }
+        public AlgorithmBlockUI AlternativeNextBlock { get; set; }
+
         public UnityEvent<AlgorithmBlockUI> OnClick { get; set; } =
             new AlgorithmBlockUIEvent();
 
@@ -29,6 +41,8 @@ namespace Algorithmizm
 
         public void RefreshAnData()
         {
+            SetTabulationLengthAnData();
+
             foreach (ValueUI itValue in _valueUis)
             {
                 Destroy(itValue.gameObject);
@@ -50,6 +64,20 @@ namespace Algorithmizm
             {
                 OnClick?.Invoke(this);
             }
+        }
+
+        private void Start()
+        {
+            _tabulationHeight = _tabulation.sizeDelta.y;
+        }
+
+        private void SetTabulationLengthAnData()
+        {
+            int prevLevel = PrevBlock != null ? PrevBlock.TabulationLevel : 0;
+            TabulationLevel = prevLevel + (IsInsidePrevBlock ? 1 : 0);
+            float tabulationWidth = TabulationLevel * ONE_TAB_LENGTH;
+
+            _tabulation.sizeDelta = new Vector2(tabulationWidth, _tabulationHeight);
         }
 
         private void InitParameter(ParameterData parameter)
