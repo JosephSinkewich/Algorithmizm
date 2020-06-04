@@ -21,17 +21,19 @@ namespace Algorithmizm
 
         private List<ValueUI> _valueUis = new List<ValueUI>();
 
-        public IAlgorithmBlock BlockData { get; set; }
-
         private float _tabulationHeight;
 
-        public int TabulationLevel { get; set; }
+        public IAlgorithmBlock BlockData { get; set; }
 
-        public AlgorithmBlockUI PrevBlock { get; set; }
+        public List<ValueUI> ValueUis => _valueUis;
+
+        public int TabulationLevel { get; set; }
+        
+        public AlgorithmBlockUI MainPrevBlock { get; set; }
         public bool IsInsidePrevBlock { get; set; }
 
+        public AlgorithmBlockUI InnerBlock { get; set; }
         public AlgorithmBlockUI NextBlock { get; set; }
-        public AlgorithmBlockUI AlternativeNextBlock { get; set; }
 
         public UnityEvent<AlgorithmBlockUI> OnClick { get; set; } =
             new AlgorithmBlockUIEvent();
@@ -73,7 +75,7 @@ namespace Algorithmizm
 
         private void SetTabulationLengthAnData()
         {
-            int prevLevel = PrevBlock != null ? PrevBlock.TabulationLevel : 0;
+            int prevLevel = MainPrevBlock != null ? MainPrevBlock.TabulationLevel : 0;
             TabulationLevel = prevLevel + (IsInsidePrevBlock ? 1 : 0);
             float tabulationWidth = TabulationLevel * ONE_TAB_LENGTH;
 
