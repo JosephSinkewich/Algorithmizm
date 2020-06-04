@@ -12,7 +12,7 @@ namespace Algorithmizm
         [SerializeField] private TextMeshProUGUI _text;
         [SerializeField] private Image _image;
 
-        [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
+        [SerializeField] private AlgorithmResourcesProvider _resourceProvider;
 
         public IVariable VariableData { get; set; }
 

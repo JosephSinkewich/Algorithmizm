@@ -1,16 +1,15 @@
 ﻿using AlgorithmizmModels.Blocks;
 using AlgorithmizmModels.Math;
 using AlgorithmizmModels.Variables;
-using LevelModule;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace Algorithmizm
 {
     public class MainAlgorithmEditorController : MonoBehaviour
     {
-        [SerializeField] private SimulationUIController _uiController;
         [SerializeField] private Transform _dialogLayer;
 
         [SerializeField] private EditPanel _editPanel;
@@ -21,7 +20,7 @@ namespace Algorithmizm
 
         [SerializeField] private Button _doneButton;
 
-        [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
+        [SerializeField] private AlgorithmResourcesProvider _resourceProvider;
 
         private AddBlockSteps _addBlockStep;
         private AlgorithmBlockUI _addTarget;
@@ -54,6 +53,9 @@ namespace Algorithmizm
         private Dictionary<MenuButton, Relations> _relationMenuButtons;
 
         public Algorithm Algorithm { get; set; }
+
+        public UnityEvent OnAlgorithmDone { get; set; } = 
+            new VoidEvent();
 
         private void Start()
         {
@@ -838,7 +840,7 @@ namespace Algorithmizm
             Algorithm.BeginBlock = _treePanel.BeginBlock;
             Algorithm.Variables = _variablesPanel.Variables;
 
-            _uiController.CloseAlgorithm();
+            OnAlgorithmDone?.Invoke();
         }
 
         private void InitAlgorithmBlocks()

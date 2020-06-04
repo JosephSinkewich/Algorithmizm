@@ -12,7 +12,7 @@ namespace Algorithmizm
         [SerializeField] private Transform _content;
         [SerializeField] private Button _viewportButton;
 
-        [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
+        [SerializeField] private AlgorithmResourcesProvider _resourceProvider;
 
         private List<VariableUI> _variablesUIs = new List<VariableUI>();
 

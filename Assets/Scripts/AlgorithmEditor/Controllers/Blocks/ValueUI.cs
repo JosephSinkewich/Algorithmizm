@@ -9,7 +9,7 @@ namespace Algorithmizm
 {
     public class ValueUI : MonoBehaviour
     {
-        [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
+        [SerializeField] private AlgorithmResourcesProvider _resourceProvider;
 
         public IValue Value { get; set; }
         public ValueType Type { get; set; }

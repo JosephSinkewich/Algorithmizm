@@ -10,7 +10,7 @@ namespace Algorithmizm
     public class ActiveLabel : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private TextMeshProUGUI _label;
-        [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
+        [SerializeField] private AlgorithmResourcesProvider _resourceProvider;
 
         private IValue _value;
 
