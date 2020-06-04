@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.AlgorithmEditor.Model;
-using UnityEngine.Events;
+﻿using UnityEngine.Events;
 
 namespace Algorithmizm
 {
