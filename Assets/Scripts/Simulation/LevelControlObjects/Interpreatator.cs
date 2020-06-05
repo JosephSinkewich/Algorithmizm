@@ -7,6 +7,7 @@ namespace LevelModule
 {
     public class Interpreatator : MonoBehaviour
     {
+        [SerializeField] private LevelAssistant _levelAssistant;
         [SerializeField] private BotComponent _bot;
 
         private IAlgorithmBlock _currentBlock;
@@ -39,6 +40,9 @@ namespace LevelModule
             _procedures = new Dictionary<string, Action>();
 
             _procedures.Add("MoveForward", MoveForwardProcedure);
+            _procedures.Add("RotateRight", RotateRightProcedure);
+            _procedures.Add("RotateLeft", RotateLeftProcedure);
+            _procedures.Add("Wait", WaitProcedure);
         }
 
         private void ExecuteBlock(IAlgorithmBlock block)
@@ -67,7 +71,25 @@ namespace LevelModule
 
         private void MoveForwardProcedure()
         {
-            Debug.Log(">>>>");
+            LevelAssistant.onStartTurn?.Invoke();
+            _bot.MoveForward();
+        }
+
+        private void RotateRightProcedure()
+        {
+            LevelAssistant.onStartTurn?.Invoke();
+            _bot.Rotate(-1);
+        }
+
+        private void RotateLeftProcedure()
+        {
+            LevelAssistant.onStartTurn?.Invoke();
+            _bot.Rotate(1);
+        }
+
+        private void WaitProcedure()
+        {
+            LevelAssistant.onStartTurn?.Invoke();
         }
 
         #endregion
