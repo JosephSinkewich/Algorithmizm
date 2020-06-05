@@ -4,6 +4,8 @@ namespace AlgorithmizmModels.Math
 {
     public class Condition : IBoolean
     {
+        private const double EQUAL_DELTA = 0.000001f;
+
         private INumber _value1;
         private INumber _value2;
 
@@ -57,11 +59,11 @@ namespace AlgorithmizmModels.Math
 
             if (Relation == Relations.Equal)
             {
-                return Value1.Value == Value2.Value;
+                return ApproximatelyEqual(Value1.Value, Value2.Value);
             }
             else if (Relation == Relations.NotEqual)
             {
-                return Value1.Value != Value2.Value;
+                return !ApproximatelyEqual(Value1.Value, Value2.Value);
             }
             else if (Relation == Relations.More)
             {
@@ -73,14 +75,31 @@ namespace AlgorithmizmModels.Math
             }
             else if (Relation == Relations.MoreEqual)
             {
-                return Value1.Value >= Value2.Value;
+                return ApproximatelyMoreOrEqual(Value1.Value, Value2.Value);
             }
             else if (Relation == Relations.LessEqual)
             {
-                return Value1.Value <= Value2.Value;
+                return ApproximatelyLessOrEqual(Value1.Value, Value2.Value);
             }
 
             throw new Exception("Condition has unknown operator");
+        }
+
+        private bool ApproximatelyEqual(double x, double y)
+        {
+            return System.Math.Abs(x - y) <= EQUAL_DELTA;
+        }
+
+        private bool ApproximatelyLessOrEqual(double x, double y)
+        {
+            return System.Math.Abs(x - y) <= EQUAL_DELTA
+                || x < y;
+        }
+
+        private bool ApproximatelyMoreOrEqual(double x, double y)
+        {
+            return System.Math.Abs(x - y) <= EQUAL_DELTA
+                || x > y;
         }
     }
 }

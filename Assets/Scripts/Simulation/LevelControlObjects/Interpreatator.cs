@@ -1,4 +1,6 @@
 ﻿using AlgorithmizmModels.Blocks;
+using AlgorithmizmModels.Math;
+using AlgorithmizmModels.Variables;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -63,8 +65,24 @@ namespace LevelModule
 
                 return;
             }
+            else if (block.Type == BlockType.Set)
+            {
+                SetBlock setBlock = block as SetBlock;
 
-
+                if (setBlock != null)
+                {
+                    if (setBlock.Variable.Type == AlgorithmizmModels.Math.ValueType.Bool)
+                    {
+                        BoolVariable boolVariable = setBlock.Variable as BoolVariable;
+                        boolVariable.IsTrue = ((IBoolean)setBlock.Value).IsTrue;
+                    }
+                    else if (setBlock.Variable.Type == AlgorithmizmModels.Math.ValueType.Number)
+                    {
+                        FloatVariable boolVariable = setBlock.Variable as FloatVariable;
+                        boolVariable.Value = ((INumber)setBlock.Value).Value;
+                    }
+                }
+            }
         }
 
         #region Procedures
