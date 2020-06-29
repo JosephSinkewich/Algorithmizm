@@ -21,7 +21,6 @@ namespace Algorithmizm
             {
                 if (_value != null && _value.Parent != null)
                 {
-
                     Expression expression = _value.Parent as Expression;
                     LogicExpression logicExpression = _value.Parent as LogicExpression;
                     Condition condition = _value.Parent as Condition;
