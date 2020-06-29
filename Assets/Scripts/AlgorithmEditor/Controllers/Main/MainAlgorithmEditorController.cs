@@ -166,6 +166,7 @@ namespace Algorithmizm
         private void InitTools()
         {
             _addTool = new AddTool(this, _contextMenu, _editPanel, _treePanel, _resourceProvider);
+            _cursorTool = new CursorTool(this, _contextMenu, _variablesPanel);
         }
 
         private void ToolChangedHandler(EditTools tool)
