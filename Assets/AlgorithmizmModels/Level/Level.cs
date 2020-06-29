@@ -1,11 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace AlgorithmizmModels.Level
 {
+    [Serializable]
     public class Level
     {
-        public string Name { get; set; }
+        public string name;
 
-        public List<LevelObject> LevelObjects { get; set; }
+        public List<LevelObject> levelObjects;
     }
 }

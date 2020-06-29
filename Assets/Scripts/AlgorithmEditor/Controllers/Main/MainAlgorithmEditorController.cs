@@ -1,16 +1,16 @@
 ﻿using AlgorithmizmModels.Blocks;
 using AlgorithmizmModels.Math;
 using AlgorithmizmModels.Variables;
-using Assets.Scripts.AlgorithmEditor.Model;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Events;
 
 namespace Algorithmizm
 {
     public class MainAlgorithmEditorController : MonoBehaviour
     {
-        [SerializeField] private Transform _canvasTransform;
+        [SerializeField] private Transform _dialogLayer;
 
         [SerializeField] private EditPanel _editPanel;
         [SerializeField] private TreePanel _treePanel;
@@ -20,7 +20,7 @@ namespace Algorithmizm
 
         [SerializeField] private Button _doneButton;
 
-        [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
+        [SerializeField] private AlgorithmResourcesProvider _resourceProvider;
 
         private AddBlockSteps _addBlockStep;
         private AlgorithmBlockUI _addTarget;
@@ -53,6 +53,9 @@ namespace Algorithmizm
         private Dictionary<MenuButton, Relations> _relationMenuButtons;
 
         public Algorithm Algorithm { get; set; }
+
+        public UnityEvent OnAlgorithmDone { get; set; } = 
+            new VoidEvent();
 
         private void Start()
         {
@@ -498,7 +501,7 @@ namespace Algorithmizm
 
         private void SetValueFromDialog(ValueUI valueUI, IValue value)
         {
-            SetValueDialog setDialog = Instantiate(_resourceProvider.SetValueDialog, _canvasTransform);
+            SetValueDialog setDialog = Instantiate(_resourceProvider.SetValueDialog, _dialogLayer);
 
             string inputValue = "0";
 
@@ -573,7 +576,7 @@ namespace Algorithmizm
 
         private void SetVariableNameFromDialog(IVariable variable)
         {
-            SetValueDialog setDialog = Instantiate(_resourceProvider.SetValueDialog, _canvasTransform);
+            SetValueDialog setDialog = Instantiate(_resourceProvider.SetValueDialog, _dialogLayer);
 
             setDialog.Init("Variable Name:", "VariableName");
 
@@ -836,6 +839,8 @@ namespace Algorithmizm
             Algorithm = new Algorithm();
             Algorithm.BeginBlock = _treePanel.BeginBlock;
             Algorithm.Variables = _variablesPanel.Variables;
+
+            OnAlgorithmDone?.Invoke();
         }
 
         private void InitAlgorithmBlocks()

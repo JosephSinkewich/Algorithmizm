@@ -1,5 +1,4 @@
-﻿using Assets.Scripts.AlgorithmEditor.Model;
-using UnityEngine;
+﻿using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Events;
 
@@ -8,7 +7,6 @@ namespace Algorithmizm
     public class EditPanel : MonoBehaviour
     {
         [SerializeField] private Toggle _addToggle;
-        [SerializeField] private Toggle _moveToggle;
         [SerializeField] private Toggle _deleteToggle;
         [SerializeField] private Toggle _cursorToggle;
 
@@ -27,11 +25,6 @@ namespace Algorithmizm
                     case EditTools.Add:
                         {
                             _addToggle.isOn = true;
-                        }
-                        break;
-                    case EditTools.Move:
-                        {
-                            _moveToggle.isOn = true;
                         }
                         break;
                     case EditTools.Delete:
@@ -65,7 +58,6 @@ namespace Algorithmizm
         private void AddListeners()
         {
             _addToggle.onValueChanged.AddListener(SetAdd);
-            _moveToggle.onValueChanged.AddListener(SetMove);
             _deleteToggle.onValueChanged.AddListener(SetDelete);
             _cursorToggle.onValueChanged.AddListener(SetCursor);
         }
@@ -73,7 +65,6 @@ namespace Algorithmizm
         private void RemoveListeners()
         {
             _addToggle.onValueChanged.RemoveListener(SetAdd);
-            _moveToggle.onValueChanged.RemoveListener(SetMove);
             _deleteToggle.onValueChanged.RemoveListener(SetDelete);
             _cursorToggle.onValueChanged.RemoveListener(SetCursor);
         }
@@ -83,15 +74,6 @@ namespace Algorithmizm
             if (value)
             {
                 _currentTool = EditTools.Add;
-                OnToolChanged?.Invoke(_currentTool);
-            }
-        }
-
-        private void SetMove(bool value)
-        {
-            if (value)
-            {
-                _currentTool = EditTools.Move;
                 OnToolChanged?.Invoke(_currentTool);
             }
         }

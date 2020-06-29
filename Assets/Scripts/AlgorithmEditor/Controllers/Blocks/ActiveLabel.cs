@@ -10,7 +10,7 @@ namespace Algorithmizm
     public class ActiveLabel : MonoBehaviour, IPointerClickHandler
     {
         [SerializeField] private TextMeshProUGUI _label;
-        [SerializeField] private AlgorithmTreeResourceProvider _resourceProvider;
+        [SerializeField] private AlgorithmResourcesProvider _resourceProvider;
 
         private IValue _value;
 
@@ -21,7 +21,6 @@ namespace Algorithmizm
             {
                 if (_value != null && _value.Parent != null)
                 {
-
                     Expression expression = _value.Parent as Expression;
                     LogicExpression logicExpression = _value.Parent as LogicExpression;
                     Condition condition = _value.Parent as Condition;
