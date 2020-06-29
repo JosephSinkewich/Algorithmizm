@@ -76,6 +76,8 @@
     <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Main\AddVariableSteps.cs" />
     <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Main\MainAlgorithmEditorController.cs" />
     <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Main\SetLabelSteps.cs" />
+    <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Main\Tools\AddTool.cs" />
+    <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Main\Tools\CursorTool.cs" />
     <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Panels\EditPanel.cs" />
     <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Panels\TreePanel.cs" />
     <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Panels\VariablesPanel.cs" />

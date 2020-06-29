@@ -25,7 +25,15 @@ namespace Algorithmizm
             RefreshButtonsListeners();
 
             return result;
-
+        }
+        
+        public void ClearContextMenu()
+        {
+            MenuButton[] menuItems = GetComponentsInChildren<MenuButton>();
+            foreach (MenuButton item in menuItems)
+            {
+                Destroy(item.gameObject);
+            }
         }
 
         private void OnDestroy()

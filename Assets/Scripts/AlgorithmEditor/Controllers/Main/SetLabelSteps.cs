@@ -1,9 +1,9 @@
 ﻿namespace Algorithmizm
 {
-    enum SetLabelSteps
+    public enum SetLabelSteps
     {
         SetTarget,
-        ChoiseLabelType,
+        ChoiceLabelType,
         SetValue
     }
 }
