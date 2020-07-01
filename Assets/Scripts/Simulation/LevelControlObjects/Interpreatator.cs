@@ -10,7 +10,8 @@ namespace LevelModule
     public class Interpreatator : MonoBehaviour
     {
         [SerializeField] private LevelAssistant _levelAssistant;
-        [SerializeField] private BotComponent _bot;
+        
+        private BotComponent _bot;
 
         private IAlgorithmBlock _currentBlock;
 
@@ -18,6 +19,11 @@ namespace LevelModule
 
         public Algorithm Algorithm { get; set; }
         public bool IsDone { get; set; }
+
+        public void Initialize(BotComponent bot)
+        {
+            _bot = bot;
+        }
 
         public void StartAlgorithm()
         {

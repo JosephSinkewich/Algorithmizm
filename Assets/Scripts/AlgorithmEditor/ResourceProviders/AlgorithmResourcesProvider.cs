@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Algorithmizm
 {
-    [CreateAssetMenu(fileName = "AlgorithmResourcesProvider", menuName = "AlgorithmEditor")]
+    [CreateAssetMenu(fileName = "AlgorithmResourcesProvider", menuName = "ResourceProviders/AlgorithmResourcesProvider")]
     public class AlgorithmResourcesProvider : SerializedScriptableObject
     {
         [SerializeField] private AlgorithmBlockUI _algorithmBlockPrefab;

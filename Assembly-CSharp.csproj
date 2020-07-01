@@ -76,7 +76,6 @@
      <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Panels\EditPanel.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Panels\TreePanel.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Panels\VariablesPanel.cs" />
-     <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\ResourceProviders\AlgorithmResourcesProvider.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\Controllers\Variables\VariableUI.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\Events\ActiveLabelEvent.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\Events\AlgorithmBlockUIEvent.cs" />
@@ -89,6 +88,7 @@
      <Compile Include="Assets\Scripts\AlgorithmEditor\Events\VariableUIEvent.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\Events\VoidEvent.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\Model\EditTools.cs" />
+     <Compile Include="Assets\Scripts\AlgorithmEditor\ResourceProviders\AlgorithmResourcesProvider.cs" />
      <Compile Include="Assets\Scripts\MenuScripts\LeaderBoardCanvas.cs" />
      <Compile Include="Assets\Scripts\MenuScripts\LevelsPageController.cs" />
      <Compile Include="Assets\Scripts\MenuScripts\MainMenuController.cs" />
@@ -98,7 +98,9 @@
      <Compile Include="Assets\Scripts\Simulation\LevelControlObjects\Interpreatator.cs" />
      <Compile Include="Assets\Scripts\Simulation\LevelControlObjects\LevelAssistant.cs" />
      <Compile Include="Assets\Scripts\Simulation\LevelObjects\LevelObjectComponent.cs" />
+     <Compile Include="Assets\Scripts\Simulation\LevelObjects\Obstacle.cs" />
      <Compile Include="Assets\Scripts\Simulation\LevelObjects\Slot.cs" />
+     <Compile Include="Assets\Scripts\Simulation\ResourceProviders\SimulationResourceProvider.cs" />
      <Compile Include="Assets\Scripts\UIGeneralControllers\WidthTMProResizer.cs" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Resources\Shaders\TMP_SDF-Mobile Overlay.shader" />
