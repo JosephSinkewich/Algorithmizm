@@ -19,7 +19,7 @@ namespace Algorithmizm
             get => _value;
             set
             {
-                if (_value != null && _value.Parent != null)
+                if (_value?.Parent != null)
                 {
                     Expression expression = _value.Parent as Expression;
                     LogicExpression logicExpression = _value.Parent as LogicExpression;

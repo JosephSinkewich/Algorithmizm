@@ -41,89 +41,11 @@ namespace Algorithmizm
 
             if (value == null)
             {
-                ActiveLabel variableLabel = CreateActiveLabel();
-                variableLabel.ValueType = type;
-
-                switch (variableLabel.ValueType)
-                {
-                    case ValueType.Bool:
-                        {
-                            value = new BoolConstant();
-                        }
-                        break;
-                    case ValueType.Number:
-                        {
-                            value = new FloatConstant();
-                        }
-                        break;
-                    default:
-                        Debug.Log("ActiveLabelType is operation but Expression is null!");
-                        break;
-                }
-
-                variableLabel.Value = value;
-
-                result.Add(variableLabel.gameObject);
+                result.Add(CreateDefaultValue(ref value, type));
             }
             else if (value is IExpression || value is Condition)
             {
-                List<GameObject> leftValue = new List<GameObject>();
-                ActiveLabel operation = null;
-                List<GameObject> rightValue = new List<GameObject>();
-
-                if (value is Expression expression)
-                {
-                    IValue value1 = expression.Value1;
-                    leftValue = CreateExpression(ref value1, ValueType.Number);
-                    expression.Value1 = (INumber)value1;
-
-                    operation = CreateActiveLabel();
-                    operation.LabelType = ActiveLabelType.Expression;
-                    operation.Value = expression;
-
-                    IValue value2 = expression.Value2;
-                    rightValue = CreateExpression(ref value2, ValueType.Number);
-                    expression.Value2 = (INumber)value2;
-                }
-                else if (value is LogicExpression logicExpression)
-                {
-                    IValue bool1 = logicExpression.Boolean1;
-                    leftValue = CreateExpression(ref bool1, ValueType.Bool);
-                    logicExpression.Boolean1 = (IBoolean)bool1;
-
-                    operation = CreateActiveLabel();
-                    operation.LabelType = ActiveLabelType.Expression;
-                    operation.Value = logicExpression;
-
-                    IValue bool2 = logicExpression.Boolean2;
-                    rightValue = CreateExpression(ref bool2, ValueType.Bool);
-                    logicExpression.Boolean2 = (IBoolean)bool2;
-                }
-                else if (value is Condition condition)
-                {
-                    IValue num1 = condition.Value1;
-                    leftValue = CreateExpression(ref num1, ValueType.Number);
-                    condition.Value1 = (INumber)num1;
-
-                    operation = CreateActiveLabel();
-                    operation.LabelType = ActiveLabelType.Condition;
-                    operation.Value = condition;
-
-                    IValue num2 = condition.Value2;
-                    rightValue = CreateExpression(ref num2, ValueType.Number);
-                    condition.Value2 = (INumber)num2;
-                }
-                
-                TextMeshProUGUI leftParanthesis = CreateTextBlock();
-                leftParanthesis.text = "(";
-                TextMeshProUGUI rightParanthesis = CreateTextBlock();
-                rightParanthesis.text = ")";
-
-                result.Add(leftParanthesis.gameObject);
-                result.AddRange(leftValue);
-                result.Add(operation.gameObject);
-                result.AddRange(rightValue);
-                result.Add(rightParanthesis.gameObject);
+                result.AddRange(CreateTwoPartExpression(ref value, type));
             }
             else if (value is IVariable variable)
             {
@@ -150,6 +72,98 @@ namespace Algorithmizm
             return result;
         }
 
+        private GameObject CreateDefaultValue(ref IValue value, ValueType type)
+        {
+            ActiveLabel variableLabel = CreateActiveLabel();
+            variableLabel.ValueType = type;
+
+            switch (variableLabel.ValueType)
+            {
+                case ValueType.Bool:
+                {
+                    value = new BoolConstant();
+                }
+                    break;
+                case ValueType.Number:
+                {
+                    value = new FloatConstant();
+                }
+                    break;
+                default:
+                    Debug.Log("ActiveLabelType is operation but Expression is null!");
+                    break;
+            }
+
+            variableLabel.Value = value;
+
+            return variableLabel.gameObject;
+        }
+
+        private List<GameObject> CreateTwoPartExpression(ref IValue value, ValueType type)
+        {
+            List<GameObject> result = new List<GameObject>();
+
+            List<GameObject> leftValue = new List<GameObject>();
+            ActiveLabel operation = null;
+            List<GameObject> rightValue = new List<GameObject>();
+
+            if (value is Expression expression)
+            {
+                IValue value1 = expression.Value1;
+                leftValue = CreateExpression(ref value1, ValueType.Number);
+                expression.Value1 = (INumber) value1;
+
+                operation = CreateActiveLabel();
+                operation.LabelType = ActiveLabelType.Expression;
+                operation.Value = expression;
+
+                IValue value2 = expression.Value2;
+                rightValue = CreateExpression(ref value2, ValueType.Number);
+                expression.Value2 = (INumber) value2;
+            }
+            else if (value is LogicExpression logicExpression)
+            {
+                IValue bool1 = logicExpression.Boolean1;
+                leftValue = CreateExpression(ref bool1, ValueType.Bool);
+                logicExpression.Boolean1 = (IBoolean) bool1;
+
+                operation = CreateActiveLabel();
+                operation.LabelType = ActiveLabelType.Expression;
+                operation.Value = logicExpression;
+
+                IValue bool2 = logicExpression.Boolean2;
+                rightValue = CreateExpression(ref bool2, ValueType.Bool);
+                logicExpression.Boolean2 = (IBoolean) bool2;
+            }
+            else if (value is Condition condition)
+            {
+                IValue num1 = condition.Value1;
+                leftValue = CreateExpression(ref num1, ValueType.Number);
+                condition.Value1 = (INumber) num1;
+
+                operation = CreateActiveLabel();
+                operation.LabelType = ActiveLabelType.Condition;
+                operation.Value = condition;
+
+                IValue num2 = condition.Value2;
+                rightValue = CreateExpression(ref num2, ValueType.Number);
+                condition.Value2 = (INumber) num2;
+            }
+
+            TextMeshProUGUI leftParanthesis = CreateTextBlock();
+            leftParanthesis.text = "(";
+            TextMeshProUGUI rightParanthesis = CreateTextBlock();
+            rightParanthesis.text = ")";
+
+            result.Add(leftParanthesis.gameObject);
+            result.AddRange(leftValue);
+            result.Add(operation.gameObject);
+            result.AddRange(rightValue);
+            result.Add(rightParanthesis.gameObject);
+
+            return result;
+        }
+
         private void DestroyExpression()
         {
             foreach (GameObject itPart in _expressionParts)
@@ -159,6 +173,7 @@ namespace Algorithmizm
                 {
                     itActiveLabel.OnClick.RemoveListener(LabelClickHandler);
                 }
+
                 Destroy(itPart);
             }
 

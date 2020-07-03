@@ -6,11 +6,11 @@ namespace LevelModule
 {
     public abstract class LevelObjectComponent : MonoBehaviour
     {
-        [SerializeField] private LevelObject _levelObject;
-
         [SerializeField] private GameObject _prefab;
 
         [SerializeField] private bool _isObstacle;
+        
+        private LevelObject _levelObject;
 
         public string Name
         {
@@ -26,5 +26,11 @@ namespace LevelModule
 
         public GameObject Prefab => _prefab;
         public bool IsObstacle => _isObstacle;
+
+        public void Initialize(LevelObject levelObject)
+        {
+            _levelObject = levelObject;
+            transform.position = LevelAssistant.CoordsToPosition(_levelObject.coords);
+        }
     }
 }

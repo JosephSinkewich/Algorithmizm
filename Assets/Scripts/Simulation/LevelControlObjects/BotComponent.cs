@@ -6,12 +6,13 @@ namespace LevelModule
 {
     public class BotComponent : LevelObjectComponent
     {
-        [SerializeField] private LevelAssistant _levelAssistant;
         [SerializeField] private Side _direction;
 
         [SerializeField] private float _actionDuation;
         [SerializeField] private int _framesCount;
         [SerializeField] private float _actionDelay;
+        
+        private LevelAssistant _levelAssistant;
 
         private Coroutine _currentCoroutine;
 
@@ -27,6 +28,11 @@ namespace LevelModule
             }
         }
 
+        public void Initialize(LevelAssistant assistant)
+        {
+            _levelAssistant = assistant;
+        }
+
         #region Procedures
 
         public void MoveForward()
@@ -38,6 +44,10 @@ namespace LevelModule
             {
                 RunActionCoroutine(Move(Coords, newCoords));
                 Coords = newCoords;
+            }
+            else
+            {
+                Debug.Log("Froward is obstacle");
             }
         }
 

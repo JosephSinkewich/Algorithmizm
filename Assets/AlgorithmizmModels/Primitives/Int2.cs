@@ -42,6 +42,11 @@ namespace AlgorithmizmModels.Primitives
             }
         }
 
+        public Int2 Clone()
+        {
+            return new Int2(x, y);
+        }
+
         public static Int2 operator +(Int2 left, Int2 right)
         {
             return new Int2(

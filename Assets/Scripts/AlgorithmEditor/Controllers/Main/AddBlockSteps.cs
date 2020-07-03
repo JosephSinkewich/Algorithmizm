@@ -3,9 +3,9 @@
     enum AddBlockSteps
     {
         SetTarget,
-        ChoiseInsertType,
-        ChoiseBlockType,
-        ChoiseBlock,
+        ChoiceInsertType,
+        ChoiceBlockType,
+        ChoiceBlock,
         SetBlockData
     }
 }
