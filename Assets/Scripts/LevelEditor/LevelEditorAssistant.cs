@@ -20,7 +20,7 @@ namespace LevelEditor
             return result;
         }
 
-        private List<LevelObject> GetSlotObjects(Slot slot)
+        public List<LevelObject> GetSlotObjects(Slot slot)
         {
             List<LevelObject> result = new List<LevelObject>();
             

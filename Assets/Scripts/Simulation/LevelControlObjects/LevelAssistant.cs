@@ -1,4 +1,5 @@
-﻿using AlgorithmizmModels.Level;
+﻿using System;
+using AlgorithmizmModels.Level;
 using AlgorithmizmModels.Primitives;
 using System.Collections.Generic;
 using UnityEngine;
@@ -27,6 +28,16 @@ namespace LevelModule
             return result;
         }
 
+        public static Int2 PositionToCoords(Vector3 position)
+        {
+            position += new Vector3(SLOT_SIZE / 2, SLOT_SIZE / 2, 0);
+            
+            int x = (int) Mathf.Round(position.x / SLOT_SIZE);
+            int y = (int) Mathf.Round(position.y / SLOT_SIZE);
+
+            return new Int2(x, y);
+        }
+
         public void DestroyCurrentLevel()
         {
             foreach (Slot itSlot in _slots.Values)
@@ -52,28 +63,7 @@ namespace LevelModule
             }
         }
 
-        protected virtual void Start()
-        {
-            if (LevelDesign == null)
-            {
-                LevelDesign = new Level();
-            }
-
-            InstantiateLevel(LevelDesign);
-        }
-
-        private void CreateLevelObject(LevelObject levelObject)
-        {
-            Slot slot = GetOrCreateSlot(levelObject.coords);
-
-            LevelObjectComponent levelObjectComponent =
-                Instantiate(_resourceProvider.LevelObjects[levelObject.name], _levelField);
-            levelObjectComponent.Initialize(levelObject);
-            
-            slot.LevelObjects.Add(levelObjectComponent);
-        }
-
-        private Slot GetOrCreateSlot(Int2 coords)
+        public Slot GetOrCreateSlot(Int2 coords)
         {
             Slot slot;
             
@@ -91,6 +81,30 @@ namespace LevelModule
             }
 
             return slot;
+        }
+
+        protected virtual void Start()
+        {
+            if (LevelDesign == null)
+            {
+                LevelDesign = new Level
+                {
+                    levelObjects = new List<LevelObject>()
+                };
+            }
+
+            InstantiateLevel(LevelDesign);
+        }
+
+        private void CreateLevelObject(LevelObject levelObject)
+        {
+            Slot slot = GetOrCreateSlot(levelObject.coords);
+
+            LevelObjectComponent levelObjectComponent =
+                Instantiate(_resourceProvider.LevelObjects[levelObject.name], _levelField);
+            levelObjectComponent.Initialize(levelObject);
+            
+            slot.LevelObjects.Add(levelObjectComponent);
         }
     }
 }
