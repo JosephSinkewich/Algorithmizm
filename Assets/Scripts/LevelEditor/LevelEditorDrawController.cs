@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using AlgorithmizmModels.Level;
 using AlgorithmizmModels.Primitives;
 using LevelModule;
 using UnityEngine;
@@ -12,31 +11,41 @@ namespace LevelEditor
         [SerializeField] private ToolsController _toolsController;
         [SerializeField] private LevelEditorAssistant _levelEditorAssistant;
 
-        private bool _isMouseDown;
+        private bool[] _mouseDowns = new bool[3];
 
         private void Update()
         {
             bool isSuccessfulClick = PointerRaycast(Input.mousePosition, out Vector3 worldPosition);
-            
-            if (Input.GetMouseButtonDown(0))
+            Int2 slotCoords = LevelAssistant.PositionToCoords(worldPosition);
+
+            for (var i = 0; i < 3; i++)
             {
+                if (!Input.GetMouseButtonDown(i)) continue;
+                
                 if (isSuccessfulClick)
                 {
-                    _isMouseDown = true;
+                    _mouseDowns[i] = true;
                 }
             }
 
-            if (_isMouseDown)
+            if (_mouseDowns[0])
             {
                 if (_toolsController.SelectedTool != null)
                 {
-                    UseTool(_toolsController.SelectedTool, worldPosition);
+                    UseTool(_toolsController.SelectedTool, slotCoords);
                 }
             }
-
-            if (Input.GetMouseButtonUp(0))
+            
+            if (_mouseDowns[1])
             {
-                _isMouseDown = false;
+                Erase(slotCoords);
+            }
+
+            for (var i = 0; i < 3; i++)
+            {
+                if (!Input.GetMouseButtonUp(i)) continue;
+                
+                _mouseDowns[i] = false;
             }
         }
 
@@ -60,18 +69,14 @@ namespace LevelEditor
             return true;
         }
 
-        private void UseTool(LevelEditorTool tool, Vector3 position)
+        private void UseTool(LevelEditorTool tool, Int2 slotCoords)
         {
-            Int2 slotCoords = LevelAssistant.PositionToCoords(position);
-            Slot slot = _levelEditorAssistant.GetOrCreateSlot(slotCoords);
-            List<LevelObject> levelObjects = _levelEditorAssistant.GetSlotObjects(slot);
-
-            Debug.Log(slot.Coords.ToString());
-            
-            foreach (LevelObject itLevelObject in levelObjects)
-            {
-                
-            }
+            _levelEditorAssistant.TryCreateLevelObject(slotCoords, tool.ObjectName);
+        }
+        
+        private void Erase(Int2 slotCoords)
+        {
+            _levelEditorAssistant.ClearAtPoint(slotCoords);
         }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using AlgorithmizmModels.Level;
+﻿using AlgorithmizmModels.Level;
 using AlgorithmizmModels.Primitives;
 using System.Collections.Generic;
 using UnityEngine;
@@ -30,7 +29,7 @@ namespace LevelModule
 
         public static Int2 PositionToCoords(Vector3 position)
         {
-            position += new Vector3(SLOT_SIZE / 2, SLOT_SIZE / 2, 0);
+            position -= new Vector3(SLOT_SIZE / 2, SLOT_SIZE / 2, 0);
             
             int x = (int) Mathf.Round(position.x / SLOT_SIZE);
             int y = (int) Mathf.Round(position.y / SLOT_SIZE);
@@ -63,7 +62,20 @@ namespace LevelModule
             }
         }
 
-        public Slot GetOrCreateSlot(Int2 coords)
+        protected virtual void Start()
+        {
+            if (LevelDesign == null)
+            {
+                LevelDesign = new Level
+                {
+                    levelObjects = new List<LevelObject>()
+                };
+            }
+
+            InstantiateLevel(LevelDesign);
+        }
+
+        protected Slot GetOrCreateSlot(Int2 coords)
         {
             Slot slot;
             
@@ -83,20 +95,7 @@ namespace LevelModule
             return slot;
         }
 
-        protected virtual void Start()
-        {
-            if (LevelDesign == null)
-            {
-                LevelDesign = new Level
-                {
-                    levelObjects = new List<LevelObject>()
-                };
-            }
-
-            InstantiateLevel(LevelDesign);
-        }
-
-        private void CreateLevelObject(LevelObject levelObject)
+        protected void CreateLevelObject(LevelObject levelObject)
         {
             Slot slot = GetOrCreateSlot(levelObject.coords);
 
