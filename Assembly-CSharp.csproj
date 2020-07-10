@@ -89,6 +89,7 @@
      <Compile Include="Assets\Scripts\AlgorithmEditor\Events\VoidEvent.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\Model\EditTools.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\ResourceProviders\AlgorithmResourcesProvider.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\CameraPositionMonitor.cs" />
      <Compile Include="Assets\Scripts\LevelEditor\LevelEditorAssistant.cs" />
      <Compile Include="Assets\Scripts\LevelEditor\LevelEditorDrawController.cs" />
      <Compile Include="Assets\Scripts\LevelEditor\LevelEditorTool.cs" />

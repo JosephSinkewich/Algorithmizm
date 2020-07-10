@@ -8,11 +8,18 @@ namespace LevelEditor
 {
     public class LevelEditorDrawController : MonoBehaviour
     {
+        private const string NAVIGATION_TOOL_NAME = "_navigation";
+        private const string ERASER_TOOL_NAME = "_eraser";
+        
         [SerializeField] private ToolsController _toolsController;
         [SerializeField] private LevelEditorAssistant _levelEditorAssistant;
 
-        private bool[] _mouseDowns = new bool[3];
+        private readonly bool[] _mouseButtonsDowns = new bool[3];
 
+        private Vector3 _navigationStartPoint;
+        private Vector3 _cameraStartPoint;
+        private Vector3 _cameraOffset;
+        
         private void Update()
         {
             bool isSuccessfulClick = PointerRaycast(Input.mousePosition, out Vector3 worldPosition);
@@ -21,31 +28,56 @@ namespace LevelEditor
             for (var i = 0; i < 3; i++)
             {
                 if (!Input.GetMouseButtonDown(i)) continue;
-                
+
                 if (isSuccessfulClick)
                 {
-                    _mouseDowns[i] = true;
+                    _mouseButtonsDowns[i] = true;
+
+                    if (_toolsController.SelectedTool != null 
+                        && _toolsController.SelectedTool.ObjectName == NAVIGATION_TOOL_NAME
+                        || i == 2)
+                    {
+                        _navigationStartPoint = worldPosition;
+                        _cameraStartPoint = Camera.main.transform.position;
+                        _cameraOffset = Vector3.zero;
+                    }
                 }
             }
 
-            if (_mouseDowns[0])
+            if (_toolsController.SelectedTool != null)
             {
-                if (_toolsController.SelectedTool != null)
+                if (_mouseButtonsDowns[0])
                 {
-                    UseTool(_toolsController.SelectedTool, slotCoords);
+                    if (_toolsController.SelectedTool.ObjectName == NAVIGATION_TOOL_NAME)
+                    {
+                        UseNavigation(worldPosition);
+                    }
+                    else if (_toolsController.SelectedTool.ObjectName == ERASER_TOOL_NAME)
+                    {
+                        ClearSlot(slotCoords);
+                    }
+                    else
+                    {
+                        UseTool(_toolsController.SelectedTool, slotCoords);
+                    }
+                }
+
+                if (_mouseButtonsDowns[1])
+                {
+                    EraseObject(_toolsController.SelectedTool, slotCoords);
+                }
+                
+                if (_mouseButtonsDowns[2])
+                {
+                    UseNavigation(worldPosition);
                 }
             }
             
-            if (_mouseDowns[1])
-            {
-                Erase(slotCoords);
-            }
-
             for (var i = 0; i < 3; i++)
             {
                 if (!Input.GetMouseButtonUp(i)) continue;
-                
-                _mouseDowns[i] = false;
+
+                _mouseButtonsDowns[i] = false;
             }
         }
 
@@ -57,7 +89,7 @@ namespace LevelEditor
             EventSystem.current.RaycastAll(pointerData, resultsData);
 
             worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
-            
+
             if (resultsData.Count > 0)
             {
                 if (resultsData[0].gameObject.GetComponent<UIBehaviour>())
@@ -73,8 +105,19 @@ namespace LevelEditor
         {
             _levelEditorAssistant.TryCreateLevelObject(slotCoords, tool.ObjectName);
         }
-        
-        private void Erase(Int2 slotCoords)
+
+        private void EraseObject(LevelEditorTool tool, Int2 slotCoords)
+        {
+            _levelEditorAssistant.RemoveLevelObject(slotCoords, tool.ObjectName);
+        }
+
+        private void UseNavigation(Vector3 currentPosition)
+        {
+            _cameraOffset = _navigationStartPoint - (currentPosition - _cameraOffset);
+            Camera.main.transform.position = _cameraStartPoint + _cameraOffset;
+        }
+
+        private void ClearSlot(Int2 slotCoords)
         {
             _levelEditorAssistant.ClearAtPoint(slotCoords);
         }

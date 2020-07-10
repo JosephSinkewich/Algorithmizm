@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using AlgorithmizmModels.Level;
 using AlgorithmizmModels.Primitives;
 using LevelModule;
@@ -24,12 +25,11 @@ namespace LevelEditor
         public bool TryCreateLevelObject(Int2 coords, string objectName)
         {
             Slot slot = GetOrCreateSlot(coords);
-            List<LevelObject> levelObjects = GetSlotObjects(slot);
 
             bool hasSlotObject = false;
-            foreach (LevelObject itLevelObject in levelObjects)
+            foreach (LevelObjectComponent itLevelObject in slot.LevelObjects)
             {
-                if (itLevelObject.name == objectName)
+                if (itLevelObject.Name == objectName)
                 {
                     hasSlotObject = true;
                     break;
@@ -52,6 +52,18 @@ namespace LevelEditor
             }
 
             return success;
+        }
+        
+        public void RemoveLevelObject(Int2 coords, string objectName)
+        {
+            Slot slot = GetOrCreateSlot(coords);
+
+            LevelObjectComponent objectToRemove = slot.LevelObjects.FirstOrDefault(x => x.Name == objectName);
+
+            if (objectToRemove != null)
+            {
+                Destroy(objectToRemove.gameObject);
+            }
         }
 
         public void ClearAtPoint(Int2 coords)
