@@ -62,6 +62,7 @@ namespace LevelEditor
 
             if (objectToRemove != null)
             {
+                slot.LevelObjects.Remove(objectToRemove);
                 Destroy(objectToRemove.gameObject);
             }
         }
