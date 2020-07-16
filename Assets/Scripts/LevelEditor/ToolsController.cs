@@ -8,15 +8,15 @@ namespace LevelEditor
     {
         [SerializeField] private ToggleGroup _toggleGroup;
         
-        private LevelEditorTool[] _tools;
+        private BaseLevelEditorTool[] _tools;
         
-        public LevelEditorTool SelectedTool { get; private set; }
+        public BaseLevelEditorTool SelectedTool { get; private set; }
 
         private void Start()
         {
-            _tools = GetComponentsInChildren<LevelEditorTool>();
+            _tools = GetComponentsInChildren<BaseLevelEditorTool>();
             
-            foreach (LevelEditorTool itTool in _tools)
+            foreach (BaseLevelEditorTool itTool in _tools)
             {
                 InitTool(itTool);
             }
@@ -28,7 +28,7 @@ namespace LevelEditor
             }
         }
 
-        private void InitTool(LevelEditorTool tool)
+        private void InitTool(BaseLevelEditorTool tool)
         {
             tool.Toggle.group = _toggleGroup;
             tool.Toggle.onValueChanged.AddListener(value =>

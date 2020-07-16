@@ -94,8 +94,12 @@
      <Compile Include="Assets\Scripts\LevelEditor\LevelEditorAssistant.cs" />
      <Compile Include="Assets\Scripts\LevelEditor\LevelEditorDrawController.cs" />
      <Compile Include="Assets\Scripts\LevelEditor\LevelEditorFieldSelector.cs" />
-     <Compile Include="Assets\Scripts\LevelEditor\LevelEditorTool.cs" />
      <Compile Include="Assets\Scripts\LevelEditor\LevelEditorUIController.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\Tools\BaseLevelEditorTool.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\Tools\EraserTool.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\Tools\LevelObjectDrawTool.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\Tools\MouseButtonEventData.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\Tools\NavigationTool.cs" />
      <Compile Include="Assets\Scripts\LevelEditor\ToolsController.cs" />
      <Compile Include="Assets\Scripts\LevelManagement\LevelSaveLoader.cs" />
      <Compile Include="Assets\Scripts\MenuScripts\LeaderBoardCanvas.cs" />

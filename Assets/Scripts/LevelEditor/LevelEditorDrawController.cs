@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using AlgorithmizmModels.Primitives;
 using LevelModule;
 using UnityEngine;
@@ -8,17 +9,11 @@ namespace LevelEditor
 {
     public class LevelEditorDrawController : MonoBehaviour
     {
-        private const string NAVIGATION_TOOL_NAME = "_navigation";
-        private const string ERASER_TOOL_NAME = "_eraser";
-        
-        [SerializeField] private ToolsController _toolsController;
-        [SerializeField] private LevelEditorAssistant _levelEditorAssistant;
-
         private readonly bool[] _mouseButtonsDowns = new bool[3];
-
-        private Vector3 _navigationStartPoint;
-        private Vector3 _cameraStartPoint;
-        private Vector3 _cameraOffset;
+        
+        public event Action<MouseButtonEventData> OnMouseButtonDown;
+        public event Action<MouseButtonEventData> OnMouseButtonPress;
+        public event Action<MouseButtonEventData> OnMouseButtonUp;
         
         private void Update()
         {
@@ -33,43 +28,15 @@ namespace LevelEditor
                 {
                     _mouseButtonsDowns[i] = true;
 
-                    if (_toolsController.SelectedTool != null 
-                        && _toolsController.SelectedTool.ObjectName == NAVIGATION_TOOL_NAME
-                        || i == 2)
-                    {
-                        _navigationStartPoint = worldPosition;
-                        _cameraStartPoint = Camera.main.transform.position;
-                        _cameraOffset = Vector3.zero;
-                    }
+                    InvokeMouseButtonDown(i, worldPosition, slotCoords);
                 }
             }
 
-            if (_toolsController.SelectedTool != null)
+            for (var i = 0; i < 3; i++)
             {
-                if (_mouseButtonsDowns[0])
+                if (_mouseButtonsDowns[i])
                 {
-                    if (_toolsController.SelectedTool.ObjectName == NAVIGATION_TOOL_NAME)
-                    {
-                        UseNavigation(worldPosition);
-                    }
-                    else if (_toolsController.SelectedTool.ObjectName == ERASER_TOOL_NAME)
-                    {
-                        ClearSlot(slotCoords);
-                    }
-                    else
-                    {
-                        UseTool(_toolsController.SelectedTool, slotCoords);
-                    }
-                }
-
-                if (_mouseButtonsDowns[1])
-                {
-                    EraseObject(_toolsController.SelectedTool, slotCoords);
-                }
-                
-                if (_mouseButtonsDowns[2])
-                {
-                    UseNavigation(worldPosition);
+                    InvokeMouseButtonPress(i, worldPosition, slotCoords);
                 }
             }
             
@@ -78,6 +45,7 @@ namespace LevelEditor
                 if (!Input.GetMouseButtonUp(i)) continue;
 
                 _mouseButtonsDowns[i] = false;
+                InvokeMouseButtonUp(i, worldPosition, slotCoords);
             }
         }
 
@@ -101,25 +69,34 @@ namespace LevelEditor
             return true;
         }
 
-        private void UseTool(LevelEditorTool tool, Int2 slotCoords)
+        private void InvokeMouseButtonDown(int index, Vector3 wlorldPosition, Int2 slotCoords)
         {
-            _levelEditorAssistant.TryCreateLevelObject(slotCoords, tool.ObjectName);
+            OnMouseButtonDown?.Invoke(new MouseButtonEventData
+            {
+                buttonIndex = index,
+                position = wlorldPosition,
+                coords = slotCoords
+            });
         }
 
-        private void EraseObject(LevelEditorTool tool, Int2 slotCoords)
+        private void InvokeMouseButtonPress(int index, Vector3 wlorldPosition, Int2 slotCoords)
         {
-            _levelEditorAssistant.RemoveLevelObject(slotCoords, tool.ObjectName);
+            OnMouseButtonPress?.Invoke(new MouseButtonEventData
+            {
+                buttonIndex = index,
+                position = wlorldPosition,
+                coords = slotCoords
+            });
         }
 
-        private void UseNavigation(Vector3 currentPosition)
+        private void InvokeMouseButtonUp(int index, Vector3 wlorldPosition, Int2 slotCoords)
         {
-            _cameraOffset = _navigationStartPoint - (currentPosition - _cameraOffset);
-            Camera.main.transform.position = _cameraStartPoint + _cameraOffset;
-        }
-
-        private void ClearSlot(Int2 slotCoords)
-        {
-            _levelEditorAssistant.ClearAtPoint(slotCoords);
+            OnMouseButtonUp?.Invoke(new MouseButtonEventData
+            {
+                buttonIndex = index,
+                position = wlorldPosition,
+                coords = slotCoords
+            });
         }
     }
 }
