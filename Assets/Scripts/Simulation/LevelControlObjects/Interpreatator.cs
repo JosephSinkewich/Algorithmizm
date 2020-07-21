@@ -9,8 +9,6 @@ namespace LevelModule
 {
     public class Interpreatator : MonoBehaviour
     {
-        [SerializeField] private LevelAssistant _levelAssistant;
-        
         private BotComponent _bot;
 
         private IAlgorithmBlock _currentBlock;
@@ -95,25 +93,25 @@ namespace LevelModule
 
         private void MoveForwardProcedure()
         {
-            LevelAssistant.onStartTurn?.Invoke();
+            SimulationAssistant.onStartTurn?.Invoke();
             _bot.MoveForward();
         }
 
         private void RotateRightProcedure()
         {
-            LevelAssistant.onStartTurn?.Invoke();
+            SimulationAssistant.onStartTurn?.Invoke();
             _bot.Rotate(-1);
         }
 
         private void RotateLeftProcedure()
         {
-            LevelAssistant.onStartTurn?.Invoke();
+            SimulationAssistant.onStartTurn?.Invoke();
             _bot.Rotate(1);
         }
 
         private void WaitProcedure()
         {
-            LevelAssistant.onStartTurn?.Invoke();
+            SimulationAssistant.onStartTurn?.Invoke();
         }
 
         #endregion

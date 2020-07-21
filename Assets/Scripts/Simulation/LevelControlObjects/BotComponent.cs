@@ -12,7 +12,7 @@ namespace LevelModule
         [SerializeField] private int _framesCount;
         [SerializeField] private float _actionDelay;
         
-        private LevelAssistant _levelAssistant;
+        private SimulationAssistant _simulationAssistant;
 
         private Coroutine _currentCoroutine;
 
@@ -28,9 +28,9 @@ namespace LevelModule
             }
         }
 
-        public void Initialize(LevelAssistant assistant)
+        public void Initialize(SimulationAssistant assistant)
         {
-            _levelAssistant = assistant;
+            _simulationAssistant = assistant;
         }
 
         #region Procedures
@@ -40,7 +40,7 @@ namespace LevelModule
             Int2 coordOffset = _direction.ToInt2();
             Int2 newCoords = Coords + coordOffset;
 
-            if (_levelAssistant.IsPassable(newCoords))
+            if (_simulationAssistant.IsPassable(newCoords))
             {
                 RunActionCoroutine(Move(Coords, newCoords));
                 Coords = newCoords;

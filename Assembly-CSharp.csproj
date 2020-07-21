@@ -89,6 +89,19 @@
      <Compile Include="Assets\Scripts\AlgorithmEditor\Events\VoidEvent.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\Model\EditTools.cs" />
      <Compile Include="Assets\Scripts\AlgorithmEditor\ResourceProviders\AlgorithmResourcesProvider.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\CameraPositionMonitor.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\CameraZoomController.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\LevelEditorAssistant.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\LevelEditorDrawController.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\LevelEditorFieldSelector.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\LevelEditorUIController.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\Tools\BaseLevelEditorTool.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\Tools\EraserTool.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\Tools\LevelObjectDrawTool.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\Tools\MouseButtonEventData.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\Tools\NavigationTool.cs" />
+     <Compile Include="Assets\Scripts\LevelEditor\ToolsController.cs" />
+     <Compile Include="Assets\Scripts\LevelManagement\LevelSaveLoader.cs" />
      <Compile Include="Assets\Scripts\MenuScripts\LeaderBoardCanvas.cs" />
      <Compile Include="Assets\Scripts\MenuScripts\LevelsPageController.cs" />
      <Compile Include="Assets\Scripts\MenuScripts\MainMenuController.cs" />
@@ -97,6 +110,7 @@
      <Compile Include="Assets\Scripts\Simulation\LevelControlObjects\BotComponent.cs" />
      <Compile Include="Assets\Scripts\Simulation\LevelControlObjects\Interpreatator.cs" />
      <Compile Include="Assets\Scripts\Simulation\LevelControlObjects\LevelAssistant.cs" />
+     <Compile Include="Assets\Scripts\Simulation\LevelControlObjects\SimulationAssistant.cs" />
      <Compile Include="Assets\Scripts\Simulation\LevelObjects\LevelObjectComponent.cs" />
      <Compile Include="Assets\Scripts\Simulation\LevelObjects\Obstacle.cs" />
      <Compile Include="Assets\Scripts\Simulation\LevelObjects\Slot.cs" />

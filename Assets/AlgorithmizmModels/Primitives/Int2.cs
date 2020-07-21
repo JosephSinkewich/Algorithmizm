@@ -42,6 +42,11 @@ namespace AlgorithmizmModels.Primitives
             }
         }
 
+        public override string ToString()
+        {
+            return $"[x:{x}, y:{y}]";
+        }
+
         public Int2 Clone()
         {
             return new Int2(x, y);

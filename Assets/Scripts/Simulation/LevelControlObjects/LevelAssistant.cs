@@ -1,9 +1,7 @@
-﻿using Algorithmizm;
-using AlgorithmizmModels.Level;
+﻿using AlgorithmizmModels.Level;
 using AlgorithmizmModels.Primitives;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Events;
 
 namespace LevelModule
 {
@@ -11,19 +9,13 @@ namespace LevelModule
     {
         public const float SLOT_SIZE = 1f;
 
-        public static readonly UnityEvent onStartTurn = new VoidEvent();
-
-        [SerializeField] private SimulationResourceProvider _resourceProvider;
+        [SerializeField] protected SimulationResourceProvider _resourceProvider;
         
-        [SerializeField] private BotComponent _botPrefab;
-        [SerializeField] private Interpreatator _interpreatator;
-        
-        [SerializeField] private Transform _levelField;
-        [SerializeField] private Transform _cameraTransform;
+        [SerializeField] protected Transform _levelField;
 
-        private readonly Dictionary<Int2, Slot> _slots = new Dictionary<Int2, Slot>();
+        protected readonly Dictionary<Int2, Slot> _slots = new Dictionary<Int2, Slot>();
 
-        public Level LevelDesign { get; private set; }
+        public Level LevelDesign { get; protected set; }
 
         public static Vector3 CoordsToPosition(Int2 coords)
         {
@@ -35,67 +27,34 @@ namespace LevelModule
             return result;
         }
 
-        public bool IsPassable(Int2 position)
+        public static Int2 PositionToCoords(Vector3 position)
         {
-            if (_slots.ContainsKey(position))
+            position -= new Vector3(SLOT_SIZE / 2, SLOT_SIZE / 2, 0);
+            
+            int x = (int) Mathf.Round(position.x / SLOT_SIZE);
+            int y = (int) Mathf.Round(position.y / SLOT_SIZE);
+
+            return new Int2(x, y);
+        }
+
+        public void DestroyCurrentLevel()
+        {
+            foreach (Slot itSlot in _slots.Values)
             {
-                foreach (LevelObjectComponent itObject in _slots[position].LevelObjects)
+                foreach (LevelObjectComponent itComponent in itSlot.LevelObjects)
                 {
-                    if (itObject.IsObstacle)
-                    {
-                        return false;
-                    }
+                    Destroy(itComponent.gameObject);
                 }
             }
-
-            return true;
-        }
-
-        private void Start()
-        {
-            Level levelDesign = new Level();
-            levelDesign.levelObjects = new List<LevelObject>
-            {
-                new LevelObject { coords = new Int2(0, 1), name = "rock" },
-                new LevelObject { coords = new Int2(0, 2), name = "rock" },
-                new LevelObject { coords = new Int2(0, 3), name = "rock" },
-                new LevelObject { coords = new Int2(0, 4), name = "rock" },
-                new LevelObject { coords = new Int2(0, 5), name = "rock" },
-                new LevelObject { coords = new Int2(0, 6), name = "rock" },
-                new LevelObject { coords = new Int2(0, 7), name = "rock" },
-                
-                new LevelObject { coords = new Int2(1, 0), name = "wall" },
-                new LevelObject { coords = new Int2(2, 0), name = "wall" },
-                new LevelObject { coords = new Int2(3, 0), name = "wall" },
-                new LevelObject { coords = new Int2(4, 0), name = "wall" },
-                new LevelObject { coords = new Int2(5, 0), name = "wall" },
-                
-                new LevelObject { coords = new Int2(1, 1), name = "wall" },
-                new LevelObject { coords = new Int2(2, 2), name = "wall" },
-                new LevelObject { coords = new Int2(3, 3), name = "wall" },
-                new LevelObject { coords = new Int2(4, 4), name = "wall" }
-            };
-
-            InstantiateLevel(levelDesign);
-            InitializeBot();
-        }
-
-        private void InitializeBot()
-        {
-            BotComponent bot =  Instantiate(_botPrefab, _levelField);
-            bot.Initialize(new LevelObject {coords = new Int2(), name = "bot"});
-            bot.Initialize(this);
-            
-            _cameraTransform.SetParent(bot.transform);
-            
-            _interpreatator.Initialize(bot);
-        }
-
-        private void InstantiateLevel(Level levelDesign)
-        {
-            LevelDesign = levelDesign;
             
             _slots.Clear();
+        }
+
+        public void InstantiateLevel(Level levelDesign)
+        {
+            DestroyCurrentLevel();
+            
+            LevelDesign = levelDesign;
             
             foreach (LevelObject itObject in LevelDesign.levelObjects)
             {
@@ -103,18 +62,20 @@ namespace LevelModule
             }
         }
 
-        private void CreateLevelObject(LevelObject levelObject)
+        protected virtual void Start()
         {
-            Slot slot = GetOrCreateSlot(levelObject.coords);
+            if (LevelDesign == null)
+            {
+                LevelDesign = new Level
+                {
+                    levelObjects = new List<LevelObject>()
+                };
+            }
 
-            LevelObjectComponent levelObjectComponent =
-                Instantiate(_resourceProvider.LevelObjects[levelObject.name], _levelField);
-            levelObjectComponent.Initialize(levelObject);
-            
-            slot.LevelObjects.Add(levelObjectComponent);
+            InstantiateLevel(LevelDesign);
         }
 
-        private Slot GetOrCreateSlot(Int2 coords)
+        protected Slot GetOrCreateSlot(Int2 coords)
         {
             Slot slot;
             
@@ -132,6 +93,17 @@ namespace LevelModule
             }
 
             return slot;
+        }
+
+        protected void CreateLevelObject(LevelObject levelObject)
+        {
+            Slot slot = GetOrCreateSlot(levelObject.coords);
+
+            LevelObjectComponent levelObjectComponent =
+                Instantiate(_resourceProvider.LevelObjects[levelObject.name], _levelField);
+            levelObjectComponent.Initialize(levelObject);
+            
+            slot.LevelObjects.Add(levelObjectComponent);
         }
     }
 }
