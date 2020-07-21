@@ -19,7 +19,7 @@ namespace Algorithmizm
             _inputField.text = inputValue;
         }
 
-        private void Awake()
+        private void Start()
         {
             _okButton.onClick.AddListener(OkClickHandler);
         }
