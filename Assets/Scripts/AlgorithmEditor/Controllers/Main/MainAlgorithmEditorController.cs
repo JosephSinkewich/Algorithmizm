@@ -23,6 +23,7 @@ namespace Algorithmizm
 
         private AddTool _addTool;
         private CursorTool _cursorTool;
+        private DeleteTool _deleteTool;
 
         public Algorithm Algorithm { get; set; }
 
@@ -167,6 +168,7 @@ namespace Algorithmizm
         {
             _addTool = new AddTool(this, _contextMenu, _editPanel, _treePanel, _resourceProvider);
             _cursorTool = new CursorTool(this, _contextMenu, _variablesPanel);
+            _deleteTool = new DeleteTool(_editPanel, _treePanel);
         }
 
         private void ToolChangedHandler(EditTools tool)
@@ -185,7 +187,6 @@ namespace Algorithmizm
                     break;
                 case EditTools.Delete:
                     {
-                        DeleteInit();
                     }
                     break;
                 case EditTools.Cursor:
@@ -200,6 +201,11 @@ namespace Algorithmizm
                 case EditTools.Add:
                     {
                         _addTool.AddOnBlock(sender);
+                    }
+                    break;
+                case EditTools.Delete:
+                    {
+                        _deleteTool.DeleteOnBlock(sender);
                     }
                     break;
             }
@@ -270,11 +276,6 @@ namespace Algorithmizm
         }
 
         private void MoveInit()
-        {
-
-        }
-
-        private void DeleteInit()
         {
 
         }
