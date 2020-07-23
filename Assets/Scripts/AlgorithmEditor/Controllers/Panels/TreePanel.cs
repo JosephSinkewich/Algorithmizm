@@ -75,6 +75,30 @@ namespace Algorithmizm
             OnTreeChanged?.Invoke(_blocks);
         }
 
+        public void DeleteBlock(AlgorithmBlockUI block)
+        {
+            AlgorithmBlockUI prevBlock = block.MainPrevBlock;
+            AlgorithmBlockUI nextBlock = block.NextBlock;
+
+            if (prevBlock.NextBlock == block)
+            {
+                prevBlock.NextBlock = nextBlock;
+            }
+            else if (prevBlock.InnerBlock == block)
+            {
+                prevBlock.InnerBlock = nextBlock;
+            }
+
+            while (block.InnerBlock != null)
+            {
+                DeleteBlock(block.InnerBlock);
+            }
+
+            _blocks.Remove(block);
+
+            Destroy(block.gameObject);
+        }
+
         private int FindOutsidePosition(AlgorithmBlockUI block)
         {
             int blockIndex = _blocks.IndexOf(block) + 1;
