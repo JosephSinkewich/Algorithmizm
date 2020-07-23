@@ -33,8 +33,6 @@ namespace LevelModule
         
         protected override void Start()
         {
-            LevelDesign = LevelSaveLoader.LoadLevel("levelLox");
-
             base.Start();
             
             InitializeBot();

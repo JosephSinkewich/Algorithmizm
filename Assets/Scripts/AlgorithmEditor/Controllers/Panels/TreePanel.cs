@@ -42,11 +42,24 @@ namespace Algorithmizm
 
             if (isInside)
             {
+                if (beforeBlock.InnerBlock != null)
+                {
+                    newBlock.NextBlock = beforeBlock.InnerBlock;
+                    beforeBlock.InnerBlock.MainPrevBlock = newBlock;
+                }
+
                 beforeBlock.InnerBlock = newBlock;
             }
             else
             {
+                if (beforeBlock.NextBlock != null)
+                {
+                    newBlock.NextBlock = beforeBlock.NextBlock;
+                    beforeBlock.NextBlock.MainPrevBlock = newBlock;
+                }
+
                 beforeBlock.NextBlock = newBlock;
+
                 index = FindOutsidePosition(beforeBlock);
             }
             

@@ -18,13 +18,9 @@ namespace Algorithmizm
         private ValueUI _setLabelValueUi;
         private ActiveLabelType _activeLabelType;
         private Dictionary<MenuButton, ActiveLabelType> _labelTypeMenuButtons;
-        private IVariable _activeLabelVariable;
         private Dictionary<MenuButton, IVariable> _labelVariableMenuButtons;
-        private Operations _numberOperation;
         private Dictionary<MenuButton, Operations> _numberOperationMenuButtons;
-        private LogicOperations _logicOperation;
         private Dictionary<MenuButton, LogicOperations> _logicOperationMenuButtons;
-        private Relations _relation;
         private Dictionary<MenuButton, Relations> _relationMenuButtons;
 
         public SetLabelSteps SetLabelSteps => _setLabelSteps;

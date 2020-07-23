@@ -14,7 +14,7 @@ namespace Algorithmizm
             _label.text = text;
         }
 
-        private void Awake()
+        private void Start()
         {
             _okButton.onClick.AddListener(OkClickHandler);
         }
