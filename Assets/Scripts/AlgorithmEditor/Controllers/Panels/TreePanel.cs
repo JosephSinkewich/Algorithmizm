@@ -1,4 +1,5 @@
 ﻿using AlgorithmizmModels.Blocks;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
@@ -97,6 +98,66 @@ namespace Algorithmizm
             _blocks.Remove(block);
 
             Destroy(block.gameObject);
+
+            OnTreeChanged?.Invoke(_blocks);
+        }
+
+        public void MoveBlock(AlgorithmBlockUI movedBlock, AlgorithmBlockUI beforeBlock)
+        {
+            List<AlgorithmBlockUI> selectedBlocks = new List<AlgorithmBlockUI>();
+
+            AlgorithmBlockUI currentBlock = movedBlock;
+            while (currentBlock != null)
+            {
+                selectedBlocks.Add(currentBlock);
+
+                if (currentBlock.InnerBlock != null)
+                {
+                    currentBlock = currentBlock.InnerBlock;
+                }
+                else if (currentBlock != movedBlock)
+                {
+                    currentBlock = currentBlock.NextBlock;
+                }
+                else
+                {
+                    break;
+                }
+            }
+
+            AlgorithmBlockUI prevBlock = movedBlock.MainPrevBlock;
+            AlgorithmBlockUI nextBlock = movedBlock.NextBlock;
+
+            if (prevBlock.NextBlock == movedBlock)
+            {
+                prevBlock.NextBlock = nextBlock;
+            }
+            else if (prevBlock.InnerBlock == movedBlock)
+            {
+                prevBlock.InnerBlock = nextBlock;
+            }
+
+            if (beforeBlock.InnerBlock != null)
+            {
+                movedBlock.NextBlock = beforeBlock.InnerBlock;
+                beforeBlock.InnerBlock = movedBlock;
+            }
+            else
+            {
+                movedBlock.NextBlock = beforeBlock.NextBlock;
+                beforeBlock.NextBlock = movedBlock;
+            }
+
+            foreach (AlgorithmBlockUI itBlock in selectedBlocks)
+            {
+                _blocks.Remove(itBlock);
+            }
+
+            _blocks.InsertRange(_blocks.IndexOf(beforeBlock) + 1, selectedBlocks);
+
+            SetContentSiblings();
+
+            OnTreeChanged?.Invoke(_blocks);
         }
 
         private int FindOutsidePosition(AlgorithmBlockUI block)

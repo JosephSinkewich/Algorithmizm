@@ -13,7 +13,7 @@ namespace Algorithmizm
             _treePanel = treePanel;
         }
 
-        public void DeleteOnBlock(AlgorithmBlockUI sender)
+        public void OnBlockClick(AlgorithmBlockUI sender)
         {
             if (sender.BlockData.Type != BlockType.Begin)
             {

@@ -8,6 +8,7 @@ namespace Algorithmizm
     {
         [SerializeField] private Toggle _addToggle;
         [SerializeField] private Toggle _deleteToggle;
+        [SerializeField] private Toggle _moveToggle;
         [SerializeField] private Toggle _cursorToggle;
 
         private EditTools _currentTool;
@@ -30,6 +31,11 @@ namespace Algorithmizm
                     case EditTools.Delete:
                         {
                             _deleteToggle.isOn = true;
+                        }
+                        break;
+                    case EditTools.Move:
+                        {
+                            _moveToggle.isOn = true;
                         }
                         break;
                     case EditTools.Cursor:
@@ -59,6 +65,7 @@ namespace Algorithmizm
         {
             _addToggle.onValueChanged.AddListener(SetAdd);
             _deleteToggle.onValueChanged.AddListener(SetDelete);
+            _moveToggle.onValueChanged.AddListener(SetMove);
             _cursorToggle.onValueChanged.AddListener(SetCursor);
         }
 
@@ -66,6 +73,7 @@ namespace Algorithmizm
         {
             _addToggle.onValueChanged.RemoveListener(SetAdd);
             _deleteToggle.onValueChanged.RemoveListener(SetDelete);
+            _moveToggle.onValueChanged.RemoveListener(SetMove);
             _cursorToggle.onValueChanged.RemoveListener(SetCursor);
         }
 
@@ -78,12 +86,20 @@ namespace Algorithmizm
             }
         }
 
-
         private void SetDelete(bool value)
         {
             if (value)
             {
                 _currentTool = EditTools.Delete;
+                OnToolChanged?.Invoke(_currentTool);
+            }
+        }
+
+        private void SetMove(bool value)
+        {
+            if (value)
+            {
+                _currentTool = EditTools.Move;
                 OnToolChanged?.Invoke(_currentTool);
             }
         }
