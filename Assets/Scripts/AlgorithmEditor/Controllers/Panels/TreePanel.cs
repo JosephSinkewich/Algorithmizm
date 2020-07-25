@@ -70,7 +70,7 @@ namespace Algorithmizm
             newBlock.IsInsidePrevBlock = isInside;
             newBlock.RefreshAnData();
 
-            SetContentSiblings();
+            SetBlocksOrderAndContentSiblings();
 
             RefreshTreeBlocksListeners();
             OnTreeChanged?.Invoke(_blocks);
@@ -104,27 +104,6 @@ namespace Algorithmizm
 
         public void MoveBlock(AlgorithmBlockUI movedBlock, AlgorithmBlockUI beforeBlock)
         {
-            List<AlgorithmBlockUI> selectedBlocks = new List<AlgorithmBlockUI>();
-
-            AlgorithmBlockUI currentBlock = movedBlock;
-            while (currentBlock != null)
-            {
-                selectedBlocks.Add(currentBlock);
-
-                if (currentBlock.InnerBlock != null)
-                {
-                    currentBlock = currentBlock.InnerBlock;
-                }
-                else if (currentBlock != movedBlock)
-                {
-                    currentBlock = currentBlock.NextBlock;
-                }
-                else
-                {
-                    break;
-                }
-            }
-
             AlgorithmBlockUI prevBlock = movedBlock.MainPrevBlock;
             AlgorithmBlockUI nextBlock = movedBlock.NextBlock;
 
@@ -148,14 +127,7 @@ namespace Algorithmizm
                 beforeBlock.NextBlock = movedBlock;
             }
 
-            foreach (AlgorithmBlockUI itBlock in selectedBlocks)
-            {
-                _blocks.Remove(itBlock);
-            }
-
-            _blocks.InsertRange(_blocks.IndexOf(beforeBlock) + 1, selectedBlocks);
-
-            SetContentSiblings();
+            SetBlocksOrderAndContentSiblings();
 
             OnTreeChanged?.Invoke(_blocks);
         }
@@ -235,12 +207,27 @@ namespace Algorithmizm
             return result;
         }
 
-        private void SetContentSiblings()
+        private void SetBlocksOrderAndContentSiblings()
         {
+            _blocks = GetNextBlocksInOrder(_beginBlock);
+
             for (int i = 0; i < _blocks.Count; i++)
             {
                 _blocks[i].transform.SetSiblingIndex(i);
             }
+        }
+
+        private List<AlgorithmBlockUI> GetNextBlocksInOrder(AlgorithmBlockUI block)
+        {
+            List<AlgorithmBlockUI> result = new List<AlgorithmBlockUI>();
+            if (block == null) return result;
+
+            result.InsertRange(0, GetNextBlocksInOrder(block.NextBlock));
+            result.InsertRange(0, GetNextBlocksInOrder(block.InnerBlock));
+
+            result.Insert(0, block);
+
+            return result;
         }
 
         private void BlockClickHandler(AlgorithmBlockUI block)
